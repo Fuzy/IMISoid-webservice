@@ -13,12 +13,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class Event {
 	private String server_id;//TODO rowid
 	private String icp;
+	
 	private Date datum;
 	private String kod_po;
 	private String druh;
 	private long cas;
 	private String ic_obs;
 	private String typ;
+	
 	private Date datum_zmeny;
 	private String poznamka;
 
@@ -126,10 +128,10 @@ public class Event {
 	@Override
 	public String toString() {
 		return "Event [server_id=" + server_id + ", icp=" + icp + ", datum="
-				+ dateFormat.format(datum) + ", kod_po=" + kod_po + ", druh=" + druh + ", cas="
+				+ datum + ", kod_po=" + kod_po + ", druh=" + druh + ", cas="
 				+ cas + ", ic_obs=" + ic_obs + ", typ=" + typ
-				+ ", datum_zmeny=" + dateFormat.format(datum_zmeny) + ", poznamka=" + poznamka
-				+ "]";
+				+ ", datum_zmeny=" + datum_zmeny + ", poznamka=" + poznamka
+				+ "]";//dateFormat.format(datum), dateFormat.format(datum_zmeny)
 	}
 
 	public static Event resultSetToEvent(ResultSet rsSet) throws SQLException {

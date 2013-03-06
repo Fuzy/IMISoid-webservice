@@ -33,10 +33,40 @@
             <artifactId>ojdbc14</artifactId>
             <version>10.2.0.5.0</version>
         </dependency>
+        
+        <dependency>
+	<groupId>junit</groupId>
+	<artifactId>junit</artifactId>
+	<version>4.10</version>
+	<scope>test</scope>
+</dependency>
+
+        <dependency>
+	<groupId>org.apache.httpcomponents</groupId>
+	<artifactId>httpclient</artifactId>
+	<version>4.0-beta1</version>
+	<scope>test</scope>
+</dependency>
 
 	</dependencies>
 
+	
+	
 	<build>
 		<finalName>Imisoid_WS</finalName>
+		
+		 <plugins>
+		<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-compiler-plugin</artifactId>
+  <version>3.0</version>
+  <configuration>
+    <source>1.7</source>
+    <target>1.7</target>
+  </configuration>
+</plugin>
+ </plugins>
+		
 	</build>
+	
 </project>

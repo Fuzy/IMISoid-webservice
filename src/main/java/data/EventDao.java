@@ -29,7 +29,7 @@ public class EventDao {
       + "values (?, ?, ?, ?, ?, ?, ?, ?, ?) returning ROWID into ?";
   private static final String SQL_UPDATE = "update "
       + TABLE_EVENT
-      + " set icp=?, datum=?, kod_po=?, druh=?, cas=?, ic_obs=?, typ=?, datum_zmeny=?, poznamka=?  where rowid=";
+      + " set icp=?, datum=?, kod_po=?, druh=?, cas=?, ic_obs=?, typ=?, datum_zmeny=?, poznamka=?  where rowid=?";
 
   static {
     try {
@@ -136,15 +136,15 @@ public class EventDao {
     }
     return events;
   }
-  
+
   public static boolean updateEvent(Event event) {
     Connection conn = null;
     PreparedStatement stmt = null;
-    
+
     Object[] values = { event.getIcp(), event.getDatum(), event.getKod_po(), event.getDruh(),
         event.getCas(), event.getIc_obs(), event.getTyp(), event.getDatum_zmeny(),
         event.getPoznamka() };
-
+    // TODO prevod casu z long na double
     try {
       conn = getConnection();
       stmt = conn.prepareStatement(SQL_UPDATE);
