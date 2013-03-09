@@ -16,7 +16,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.codehaus.jettison.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -24,6 +23,7 @@ import org.junit.Test;
 public class Tests {
   private static final String URI = "http://localhost:8081/Imisoid_WS/events";
 
+  @Ignore
   @Test
   public void httpDelete() {
     HttpResponse resp = null;
@@ -44,12 +44,13 @@ public class Tests {
 
   }
 
+  @Ignore
   @Test
   public void httpGet() {
     HttpResponse resp = null;
     try {
       HttpClient httpClient = new DefaultHttpClient();
-      final HttpGet get = new HttpGet(URI);
+      final HttpGet get = new HttpGet(URI+"/xxx?from=30.7.2004&to=30.7.2004");//"/0000001?from=30.7.2004&to=30.7.2004"
       resp = httpClient.execute(get);
     }
     catch (ClientProtocolException e) {
@@ -91,10 +92,12 @@ public class Tests {
     Assert.assertEquals(HttpStatus.SC_NO_CONTENT, resp.getStatusLine().getStatusCode());
   }
   
+  
   @Test
   public void httpPostAsJson() {
     HttpResponse resp = null;
-    String event = "{\"cas\":\"28800000\",\"datum\":\"30.07.2004\",\"datum_zmeny\":\"30.07.2004\",\"druh\":\"P\",\"ic_obs\":\"KDA\",\"icp\":\"0000001\",\"kod_po\":\"00\",\"server_id\":\"AAAC4zAAMAAARwPABN\",\"typ\":\"O\"}";
+    //String event = "{\"cas\":\"28800000\",\"datum\":\"30.07.2004\",\"datum_zmeny\":\"30.07.2004\",\"druh\":\"P\",\"ic_obs\":\"KDA\",\"icp\":\"0000001\",\"kod_po\":\"00\",\"server_id\":\"AAAC4zAAMAAARwPABN\",\"typ\":\"O\"}";
+    String event = "{\"cas\":\"28800000\",\"datum\":\"30.07.2004\",\"datum_zmeny\":\"30.07.2004\",\"druh\":\"P\",\"ic_obs\":\"KDA\",\"icp\":\"0000001\",\"kod_po\":\"00\",\"server_id\":null,\"typ\":\"O\"}";
 
     try {
       HttpClient httpClient = new DefaultHttpClient();
@@ -117,6 +120,7 @@ public class Tests {
     Assert.assertEquals(HttpStatus.SC_NO_CONTENT, resp.getStatusLine().getStatusCode());
   }
 
+  @Ignore
   @Test
   public void httpPut() {
 

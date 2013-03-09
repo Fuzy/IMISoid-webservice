@@ -3,7 +3,7 @@ package data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
-import static data.Util.dateFormat;
+//import static data.Util.dateFormat;
 import static data.Util.timeFromDayDoubleToDayMs;
 
 import javax.xml.bind.annotation.XmlRootElement;

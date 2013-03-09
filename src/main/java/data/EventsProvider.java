@@ -1,5 +1,6 @@
 package data;
 
+import java.net.URI;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -9,18 +10,15 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+import exceptions.MyException;
 
 @Path("/events")
 public class EventsProvider {
@@ -31,14 +29,18 @@ public class EventsProvider {
 
   @DELETE
   @Path("{rowid}")
-  public void deleteEvent(@PathParam("rowid") String rowid) {
-    
-    boolean deleted = EventDao.deleteEvent(rowid);
-    System.out.println("EventsProvider.deleteEvent() rowid: " + rowid + " deleted: " + deleted);
-    /*if (deleted == false) {
-      throw new WebApplicationException(Response.Status.UNAUTHORIZED);
-    }*/
-
+  public Response deleteEvent(@PathParam("rowid") String rowid) {    
+    boolean deleted = false;
+    String errMsg = null;
+    try {
+      deleted = EventDao.deleteEvent(rowid);
+    }
+    catch (SQLException e) {
+      processServerError(e);
+    }
+    System.out.println("EventsProvider.deleteEvent() rowid: " + rowid + " deleted: " + deleted + " errMsg: " + errMsg);
+    //TODO neresim deleted
+    return Response.ok().build();
   }
 
   @GET
@@ -61,21 +63,24 @@ public class EventsProvider {
 
   // http://localhost:8080/Imisoid_WS/events/0000001?from=29.7.2004&to=30.7.2004
   // ?from={from}&to={to}"
+  //TODO syncMarkerFrom
   @GET
   @Path("{username}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public List<Event> getEventsForUser(@PathParam("username") String username,
+  @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+  public Response getEventsForUser(@PathParam("username") String username,
       @QueryParam("from") String from, @QueryParam("to") String to) {
     System.out.println("EventsProvider.getEventsForUser() " + "user: " + username + " from: "
         + from + " to: " + to);
+    List<Event> events = null;
     try {
       // return EventDao.getEvents("0000001", "29.7.2004", "30.7.2004");
-      return EventDao.getEvents(username, from, to);
+      events = EventDao.getEvents(username, from, to);
     }
     catch (SQLException e) {
-      e.printStackTrace();
-      return null;
+      processServerError(e);
     }
+    if (events == null || events.isEmpty())  return Response.status(Response.Status.NO_CONTENT).build();
+    return Response.ok(events).build();
   }
 
   /*@POST
@@ -98,10 +103,39 @@ public class EventsProvider {
   
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
-  public void updateEvent(Event event) {System.out.println("Event: " + event);
-      boolean updated = EventDao.updateEvent(event);
-      System.out.println("EventsProvider.updateEvent() updated: " + updated);   
-   
+  public Response createOrUpdateEvent(Event event) {
+    System.out.println("Event: " + event);
+    //boolean created
+    
+    if (event.getServer_id() ==  null) {
+      // insert
+      String rowid = null; 
+      try {
+        rowid = EventDao.createEvent(event);
+      }
+      catch (SQLException e) {
+        processServerError(e);
+      }
+      URI createdUri = URI.create(rowid);//TODO null pointer ex
+      System.out.println("EventsProvider.createOrUpdateEvent() created: " + rowid);
+      return Response.created(createdUri).build();
+       
+    } else { 
+      // update
+      boolean updated = false;
+      try {
+        updated = EventDao.updateEvent(event);
+      }
+      catch (SQLException e) {
+        processServerError(e);
+      }
+      System.out.println("EventsProvider.createOrUpdateEvent() updated: " + updated); 
+      return Response.status(Response.Status.ACCEPTED).build();
+    }
+  }
+  
+  private void processServerError(SQLException e) {
+    throw new MyException(e.getMessage(), Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
   }
 
 }

@@ -46,16 +46,17 @@ public class EventDao {
     return DriverManager.getConnection(url, user, password);
   }
 
-  public static String createEvent(Event event) {
+  public static String createEvent(Event event) throws SQLException {
     Connection conn = null;
     OraclePreparedStatement stmt = null;
     ResultSet rset = null;
     int affectedRows = 0;
-    String rowid = "";
+    String rowid = null;
 
     Object[] values = { event.getIcp(), event.getDatum(), event.getKod_po(), event.getDruh(),
-        event.getCas(), event.getIc_obs(), event.getTyp(), event.getDatum_zmeny(),
+        Util.timeFromDayMsToDayDouble(event.getCas()), event.getIc_obs(), event.getTyp(), event.getDatum_zmeny(),
         event.getPoznamka() };
+ // TODO prevod casu z long na double
 
     try {
       conn = getConnection();
@@ -73,8 +74,8 @@ public class EventDao {
 
     }
     catch (SQLException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
+      throw e;
     }
 
     System.out.println("affectedRows: " + affectedRows + " rowid: " + rowid);
@@ -82,7 +83,7 @@ public class EventDao {
     return rowid;
   }
 
-  public static boolean deleteEvent(String rowid) {
+  public static boolean deleteEvent(String rowid) throws SQLException {
     Connection conn = null;
     PreparedStatement stmt = null;
 
@@ -96,8 +97,8 @@ public class EventDao {
       }
     }
     catch (SQLException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
+      throw e;
     }
 
     return false;
@@ -126,9 +127,10 @@ public class EventDao {
     }
     catch (SQLException e) {
       e.printStackTrace();
+      throw e;
     }
     finally {
-      closeConnection(conn, stmt, rset);
+      closeConnection(conn, stmt, rset);//TODO jinde asi chybi
     }
 
     for (Event event : events) {
@@ -137,12 +139,12 @@ public class EventDao {
     return events;
   }
 
-  public static boolean updateEvent(Event event) {
+  public static boolean updateEvent(Event event) throws SQLException {
     Connection conn = null;
     PreparedStatement stmt = null;
 
     Object[] values = { event.getIcp(), event.getDatum(), event.getKod_po(), event.getDruh(),
-        event.getCas(), event.getIc_obs(), event.getTyp(), event.getDatum_zmeny(),
+        Util.timeFromDayMsToDayDouble(event.getCas()), event.getIc_obs(), event.getTyp(), event.getDatum_zmeny(),
         event.getPoznamka() };
     // TODO prevod casu z long na double
     try {
@@ -156,8 +158,8 @@ public class EventDao {
       }
     }
     catch (SQLException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
+      throw e;
     }
 
     return false;
