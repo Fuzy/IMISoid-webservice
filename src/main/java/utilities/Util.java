@@ -48,5 +48,12 @@ public class Util {
     cal.setTimeInMillis(time);
     return dateFormat.format(cal.getTime());
   }
+  
+  public static long getPreviousDay(long time) {
+    Calendar cal = Calendar.getInstance();
+    cal.setTimeInMillis(time);
+    cal.add(Calendar.DATE, -1);
+    return cal.getTimeInMillis();
+  }
 
 }

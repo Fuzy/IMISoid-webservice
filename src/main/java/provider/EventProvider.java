@@ -6,7 +6,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
-import data.Event;
+import model.Event;
+
 
 public class EventProvider {
 	@Context

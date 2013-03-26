@@ -18,9 +18,10 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import dao.EventDao;
-import dao.TestConnection;
-import data.Event;
+import model.Event;
+
+import database.dao.EventDao;
+import database.dao.TestConnection;
 
 import exceptions.MyException;
 
@@ -123,9 +124,9 @@ public class EventsProvider {
       // insert
       String rowid = null;
       try {
-        rowid = EventDao.createEvent(event);
+        rowid = EventDao.processCreateEvent(event);
       }
-      catch (SQLException e) {
+      catch (Exception e) {
         processServerError(e);
       }
       URI createdUri = URI.create(rowid);// TODO null pointer ex
@@ -147,7 +148,7 @@ public class EventsProvider {
     }
   }
 
-  private void processServerError(SQLException e) {
+  private void processServerError(Exception e) {
     throw new MyException(e.getMessage(), Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
   }
 
