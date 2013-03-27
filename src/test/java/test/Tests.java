@@ -40,7 +40,7 @@ public class Tests {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-    Assert.assertEquals(HttpStatus.SC_NO_CONTENT, resp.getStatusLine().getStatusCode());
+    Assert.assertEquals(HttpStatus.SC_OK, resp.getStatusLine().getStatusCode());
 
   }
 
@@ -50,7 +50,27 @@ public class Tests {
     HttpResponse resp = null;
     try {
       HttpClient httpClient = new DefaultHttpClient();
-      final HttpGet get = new HttpGet(URI+"/xxx?from=30.7.2004&to=30.7.2004");//"/0000001?from=30.7.2004&to=30.7.2004"
+      final HttpGet get = new HttpGet(URI + "/xxx?from=30.7.2004&to=30.7.2004");// "/0000001?from=30.7.2004&to=30.7.2004"
+      resp = httpClient.execute(get);
+    }
+    catch (ClientProtocolException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    Assert.assertEquals(HttpStatus.SC_NO_CONTENT, resp.getStatusLine().getStatusCode());
+  }
+
+  @Ignore
+  @Test
+  public void httpGetExisting() {
+    HttpResponse resp = null;
+    try {
+      HttpClient httpClient = new DefaultHttpClient();
+      final HttpGet get = new HttpGet(URI + "/0000001?from=30.7.2004&to=30.7.2004");// "/0000001?from=30.7.2004&to=30.7.2004"
       resp = httpClient.execute(get);
     }
     catch (ClientProtocolException e) {
@@ -91,13 +111,14 @@ public class Tests {
 
     Assert.assertEquals(HttpStatus.SC_NO_CONTENT, resp.getStatusLine().getStatusCode());
   }
-  
-  
+
+  //@Ignore
   @Test
   public void httpPostAsJson() {
     HttpResponse resp = null;
-    //String event = "{\"cas\":\"28800000\",\"datum\":\"30.07.2004\",\"datum_zmeny\":\"30.07.2004\",\"druh\":\"P\",\"ic_obs\":\"KDA\",\"icp\":\"0000001\",\"kod_po\":\"00\",\"server_id\":\"AAAC4zAAMAAARwPABN\",\"typ\":\"O\"}";
-    String event = "{\"cas\":\"28800000\",\"datum\":\"30.07.2004\",\"datum_zmeny\":\"30.07.2004\",\"druh\":\"P\",\"ic_obs\":\"KDA\",\"icp\":\"0000001\",\"kod_po\":\"00\",\"server_id\":null,\"typ\":\"O\"}";
+    // String event =
+    // "{\"cas\":\"28800000\",\"datum\":\"30.07.2004\",\"datum_zmeny\":\"30.07.2004\",\"druh\":\"P\",\"ic_obs\":\"KDA\",\"icp\":\"0000001\",\"kod_po\":\"00\",\"server_id\":\"AAAC4zAAMAAARwPABN\",\"typ\":\"O\"}";
+    String event = "{\"cas\":\"28800000\",\"datum\":\"28800000\",\"datum_zmeny\":\"28800000\",\"druh\":\"P\",\"ic_obs\":\"KDA\",\"icp\":\"0000001\",\"kod_po\":\"00\",\"server_id\":null,\"typ\":\"O\"}";
 
     try {
       HttpClient httpClient = new DefaultHttpClient();
@@ -116,7 +137,7 @@ public class Tests {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-    
+
     Assert.assertEquals(HttpStatus.SC_NO_CONTENT, resp.getStatusLine().getStatusCode());
   }
 

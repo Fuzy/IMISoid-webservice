@@ -1,8 +1,8 @@
 package provider;
 
 import java.net.URI;
-import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -17,16 +17,19 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
 
+import manager.EventManager;
 import model.Event;
 
-import database.dao.EventDao;
-import database.dao.TestConnection;
+import database.connection.TestConnection;
 
 import exceptions.MyException;
 
 @Path("/events")
 public class EventsProvider {
+  private static Logger log = Logger.getLogger("imisoid");
   @Context
   UriInfo uriInfo;
   @Context
@@ -34,40 +37,36 @@ public class EventsProvider {
 
   @DELETE
   @Path("{rowid}")
-  public Response deleteEvent(@PathParam("rowid") String rowid) {
+  public Response deleteEvent(@PathParam("rowid") String rowid) throws MyException {
+    log.info("");
     boolean deleted = false;
     String errMsg = null;
     try {
-      deleted = EventDao.deleteEvent(rowid);
+      deleted = EventManager.processDeleteEvent(rowid);
     }
-    catch (SQLException e) {
+    catch (Exception e) {
       processServerError(e);
     }
-    System.out.println("EventsProvider.deleteEvent() rowid: " + rowid + " deleted: " + deleted
-        + " errMsg: " + errMsg);
+    log.info("rowid: " + rowid + " deleted: " + deleted + " errMsg: " + errMsg);
     // TODO neresim deleted
     return Response.ok().build();
   }
 
   // TODO pouzit jako test spojeni
-  /*@GET
-  @Produces(MediaType.TEXT_PLAIN)
-  public List<Event> getEventsToBrowser() {
-    try {
-      System.out.println("EventsProvider.getEventsToBrowser()");
-      return EventDao.getEvents("0000001", "29.7.2004", "30.7.2004");
-    }
-    catch (SQLException e) {
-      e.printStackTrace();
-      return null;
-    }
-  }*/
+  /*
+   * @GET
+   * 
+   * @Produces(MediaType.TEXT_PLAIN) public List<Event> getEventsToBrowser() {
+   * try { System.out.println("EventsProvider.getEventsToBrowser()"); return
+   * EventDao.getEvents("0000001", "29.7.2004", "30.7.2004"); } catch
+   * (SQLException e) { e.printStackTrace(); return null; } }
+   */
 
   // TODO WS ok - 200, DB - ne ok 503 (jinak 404)
   @GET
-  @Produces({MediaType.TEXT_PLAIN + ";charset=utf-8", MediaType.TEXT_HTML + ";charset=utf-8"})
+  @Produces({ MediaType.TEXT_PLAIN + ";charset=utf-8", MediaType.TEXT_HTML + ";charset=utf-8" })
   public Response test() {
-    System.out.println("EventsProvider.test()");
+    log.info("");
     String result = "";
     try {
       result = TestConnection.testConnection();
@@ -85,15 +84,15 @@ public class EventsProvider {
   @Path("{username}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
   public Response getEventsForUser(@PathParam("username") String username,
-      @QueryParam("from") String from, @QueryParam("to") String to) {
-    System.out.println("EventsProvider.getEventsForUser() " + "user: " + username + " from: "
-        + from + " to: " + to);
+      @QueryParam("from") String from, @QueryParam("to") String to) throws MyException {
+    log.info("user: " + username + " from: " + from + " to: " + to);
     List<Event> events = null;
     try {
       // return EventDao.getEvents("0000001", "29.7.2004", "30.7.2004");
-      events = EventDao.getEvents(username, from, to);
+      events = EventManager.processGetEvents(username, from, to);
+      log.info("events.size(): " + events.size());
     }
-    catch (SQLException e) {
+    catch (Exception e) {
       processServerError(e);
     }
     if (events == null || events.isEmpty())
@@ -116,21 +115,21 @@ public class EventsProvider {
 
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
-  public Response createOrUpdateEvent(Event event) {
-    System.out.println("Event: " + event);
+  public Response createOrUpdateEvent(Event event) throws MyException {
+    log.info("Event: " + event);
     // boolean created
 
     if (event.getServer_id() == null) {
       // insert
       String rowid = null;
       try {
-        rowid = EventDao.processCreateEvent(event);
+        rowid = EventManager.processCreateEvent(event);
       }
       catch (Exception e) {
         processServerError(e);
       }
       URI createdUri = URI.create(rowid);// TODO null pointer ex
-      System.out.println("EventsProvider.createOrUpdateEvent() created: " + rowid);
+      log.info("created: " + rowid);
       return Response.created(createdUri).build();
 
     }
@@ -138,18 +137,22 @@ public class EventsProvider {
       // update
       boolean updated = false;
       try {
-        updated = EventDao.updateEvent(event);
+        updated = EventManager.processUpdateEvent(event);
       }
-      catch (SQLException e) {
+      catch (Exception e) {
         processServerError(e);
       }
-      System.out.println("EventsProvider.createOrUpdateEvent() updated: " + updated);
+      log.info("updated: " + updated);
       return Response.status(Response.Status.ACCEPTED).build();
     }
   }
 
-  private void processServerError(Exception e) {
-    throw new MyException(e.getMessage(), Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+  private void processServerError(Exception e) throws MyException {
+    log.warning(e.getMessage());
+    //throw new MyException(e.getMessage(), Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+    throw new MyException(e.getMessage());
   }
+
+  
 
 }

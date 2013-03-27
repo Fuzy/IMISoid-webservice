@@ -1,15 +1,17 @@
 package database.connection;
 
-import static database.Credentials.password;
-import static database.Credentials.url;
-import static database.Credentials.user;
+import static database.connection.Credentials.password;
+import static database.connection.Credentials.url;
+import static database.connection.Credentials.user;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 public class ConnectionManager {
-  private static Connection conn = null;
+  private static Logger log = Logger.getLogger("imisoid");
+  //private static Connection conn = null;
   
   public ConnectionManager() {
   }
@@ -26,11 +28,11 @@ public class ConnectionManager {
   }
   
   public Connection getConnection() throws SQLException {
-    if (conn != null && conn.isClosed() != true) {
-      System.out.println("spojeni existuje");
+    /*if (conn != null && conn.isClosed() != true) {
+      log.info("spojeni existuje");
       return conn;
-    }
-    System.out.println("nove spojeni");
+    }*/
+    //log.info("Vytvarim spojeni");
     return DriverManager.getConnection(url, user, password);
   }// TODO connection factory
 }
