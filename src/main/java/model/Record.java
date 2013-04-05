@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Record {
-  private BigDecimal id;
+  private BigDecimal id;//TODO string
   private long datum;
   private String kodpra;
   private String zc;
