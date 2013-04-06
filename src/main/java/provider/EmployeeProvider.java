@@ -55,5 +55,22 @@ public class EmployeeProvider {
    
     return Response.ok(employees).build();
   }
+  
+  @GET
+  @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+  public Response getLastRecords() throws MyException {
+    log.info("");
+    List<Employee> employees = null;
+    try {
+      conn = getConnection();
+      employees =  EmployeeDao.getLastRecords(conn);
+    }
+    catch (SQLException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+   
+    return Response.ok(employees).build();
+  }
 
 }

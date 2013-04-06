@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Util {
-  public static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+  public static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
   /**
    * Time is <0.0-24.0>h
