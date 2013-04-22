@@ -2,9 +2,12 @@ package utilities;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 public class Util {
-  public static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+  public static final SimpleDateFormat dateAndTimeFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+  public static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+  public static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
   /**
    * Time is <0.0-24.0>h
@@ -35,6 +38,7 @@ public class Util {
 
   public static long dateToMsSinceEpoch(java.sql.Date date) {
     Calendar cal = Calendar.getInstance();
+    cal.setTimeZone(TimeZone.getTimeZone("UTC"));//TODO je to treba?
     cal.setTime(date);
     return cal.getTimeInMillis();
   }
@@ -43,10 +47,22 @@ public class Util {
     return new java.sql.Date(date);
   }
 
-  public static String formatTime(long time) {
+  public static String formatDateAndTime(long time) {
+    Calendar cal = Calendar.getInstance();
+    cal.setTimeInMillis(time);
+    return dateAndTimeFormat.format(cal.getTime());
+  }
+  
+  public static String formatDate(long time) {
     Calendar cal = Calendar.getInstance();
     cal.setTimeInMillis(time);
     return dateFormat.format(cal.getTime());
+  }
+  
+  public static String formatTime(long time) {
+    Calendar cal = Calendar.getInstance();
+    cal.setTimeInMillis(time);
+    return timeFormat.format(cal.getTime());
   }
   
   public static long getPreviousDay(long time) {

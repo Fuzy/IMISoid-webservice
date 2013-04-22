@@ -114,7 +114,7 @@ public class Employee {
   @Override
   public String toString() {
     return "Employee [icp=" + icp + ", kodpra=" + kodpra + ", isSubordinate=" + isSubordinate
-        + ", lastEventTime=" + formatTime(lastEventTime) + ", kod_po=" + kod_po + ", druh=" + druh + "]";
+        + ", lastEventTime=" + formatDateAndTime(lastEventTime) + ", kod_po=" + kod_po + ", druh=" + druh + "]";
   }
 
   private static String COL_ICP = "ICP";

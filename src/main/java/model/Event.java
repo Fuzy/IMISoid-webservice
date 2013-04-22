@@ -134,9 +134,9 @@ public class Event {
 
   @Override
   public String toString() {
-    return "Event [server_id=" + rowid + ", icp=" + icp + ", datum=" + formatTime(datum)
+    return "Event [server_id=" + rowid + ", icp=" + icp + ", datum=" + formatDateAndTime(datum)
         + ", kod_po=" + kod_po + ", druh=" + druh + ", cas=" + cas + ", ic_obs=" + ic_obs
-        + ", typ=" + typ + ", datum_zmeny=" + formatTime(datum_zmeny) + ", poznamka=" + poznamka
+        + ", typ=" + typ + ", datum_zmeny=" + formatDateAndTime(datum_zmeny) + ", poznamka=" + poznamka
         + "]";
   }
 
@@ -154,8 +154,8 @@ public class Event {
     event.setPoznamka(rsSet.getString(COL_POZNAMKA));
     return event;
   }
-
-  public Object[] getEventAsArrayOfObjects() {
+  
+  public Object[] eventAsArrayOfObjects() {
     Object[] values = { icp, longToDate(datum), kod_po, druh, timeFromDayMsToDayDouble(cas),
         ic_obs, typ, longToDate(datum_zmeny), poznamka };
     return values;

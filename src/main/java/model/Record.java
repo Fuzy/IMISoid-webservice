@@ -146,9 +146,9 @@ public class Record {
 
   @Override
   public String toString() {
-    return "Record [id=" + id + ", datum=" + datum + ", kodpra=" + kodpra + ", zc=" + zc
+    return "Record [id=" + id + ", datum=" + formatDate(datum) + ", kodpra=" + kodpra + ", zc=" + zc
         + ", stav_v=" + stav_v + ", cpolzak=" + cpolzak + ", cpozzak=" + cpozzak
-        + ", mnozstvi_odved=" + mnozstvi_odved + ", pozn_hl=" + pozn_hl + ", pozn_ukol="
+        + ", mnozstvi_odved=" + formatTime(mnozstvi_odved) + ", pozn_hl=" + pozn_hl + ", pozn_ukol="
         + pozn_ukol + ", poznamka=" + poznamka + "]";
   }
 

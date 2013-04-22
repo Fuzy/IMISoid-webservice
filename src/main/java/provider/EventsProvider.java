@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.PathParam;
@@ -143,6 +144,22 @@ public class EventsProvider {
       log.info("updated: " + updated);
       return Response.status(Response.Status.ACCEPTED).build();
     }
+  }
+  
+  @PUT
+  @Path("{rowid}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public Response updateEvent(Event event) throws MyException {
+    log.info("updateEvent Event: " + event);
+    boolean updated = false;
+    try {
+      updated = EventManager.processUpdateEvent(event);
+    }
+    catch (Exception e) {
+      processServerError(e);
+    }
+    log.info("updated: " + updated);
+    return Response.status(Response.Status.ACCEPTED).build();
   }
 
   private void processServerError(Exception e) throws MyException {

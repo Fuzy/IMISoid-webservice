@@ -29,7 +29,7 @@ public class EventDao {
   private static final String SQL_GET_EVENT = "select t.rowid, t.* from " + TABLE_EVENT
       + " t where t.rowid like ?";
   private static final String SQL_GET_EVENTS = "select rowid, t.* from " + TABLE_EVENT
-      + " t where icp like ? " + "and datum >=  ? and datum <=  ? ";
+      + " t where icp like ? " + "and datum >=  ? and datum <=  ? " + "and typ not like 'S'";
   private static final String SQL_INSERT = "insert into " + TABLE_EVENT
       + " (icp, datum, kod_po, druh, cas, ic_obs, typ, datum_zmeny, poznamka) "
       + "values (?, ?, ?, ?, ?, ?, ?, ?, ?) returning ROWID into ?";
@@ -45,7 +45,7 @@ public class EventDao {
     int affectedRows = 0;
     String rowid = null;
 
-    Object[] values = event.getEventAsArrayOfObjects();
+    Object[] values = event.eventAsArrayOfObjects();
 
     try {
       // conn = getConnection();
@@ -144,6 +144,7 @@ public class EventDao {
 
       while (rset.next()) {
         Event event = Event.resultSetToEvent(rset);
+        log.info(""+event);
         events.add(event);
       }
     }
@@ -166,7 +167,7 @@ public class EventDao {
     // Connection conn = null;
     PreparedStatement stmt = null;
 
-    Object[] values = event.getEventAsArrayOfObjects();
+    Object[] values = event.eventAsArrayOfObjects();
     try {
       // conn = getConnection();
       stmt = conn.prepareStatement(SQL_UPDATE);
