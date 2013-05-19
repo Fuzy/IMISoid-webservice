@@ -24,8 +24,6 @@ import model.Event;
 
 import database.connection.TestConnection;
 
-import exceptions.MyException;
-
 @Path("/events")
 public class EventsProvider {
   private static Logger log = Logger.getLogger("imisoid");
@@ -36,16 +34,11 @@ public class EventsProvider {
 
   @DELETE
   @Path("{rowid}")
-  public Response deleteEvent(@PathParam("rowid") String rowid) throws MyException {
+  public Response deleteEvent(@PathParam("rowid") String rowid) throws Exception {
     log.info("");
     boolean deleted = false;
     String errMsg = null;
-    try {
-      deleted = EventManager.processDeleteEvent(rowid);
-    }
-    catch (Exception e) {
-      processServerError(e);
-    }
+    deleted = EventManager.processDeleteEvent(rowid);
     log.info("rowid: " + rowid + " deleted: " + deleted + " errMsg: " + errMsg);
     // TODO neresim deleted
     return Response.ok().build();
@@ -71,7 +64,7 @@ public class EventsProvider {
       result = TestConnection.testConnection();
     }
     catch (Exception e) {
-      return Response.ok("Test spojení neúspěšný: " + e.getMessage()).status(500).build();
+      return Response.ok("Test spojení neúspěšný: " + e.getMessage()).status(500).build();// TODO
     }
     return Response.ok("Test spojení úspěšný: " + result).build();
   }
@@ -83,91 +76,50 @@ public class EventsProvider {
   @Path("{username}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
   public Response getEventsForUser(@PathParam("username") String username,
-      @QueryParam("from") String from, @QueryParam("to") String to) throws MyException {
+      @QueryParam("from") String from, @QueryParam("to") String to) throws Exception {
     log.info("user: " + username + " from: " + from + " to: " + to);
     List<Event> events = null;
-    try {
-      // return EventDao.getEvents("0000001", "29.7.2004", "30.7.2004");
-      events = EventManager.processGetEvents(username, from, to);
+    // return EventDao.getEvents("0000001", "29.7.2004", "30.7.2004");
+    events = EventManager.processGetEvents(username, from, to);
+    if (events != null)
       log.info("events.size(): " + events.size());
-    }
-    catch (Exception e) {
-      processServerError(e);
-    }
     if (events == null || events.isEmpty())
       return Response.status(Response.Status.NO_CONTENT).build();
     return Response.ok(events).build();
   }
 
-  /*
-   * @POST
-   * 
-   * @Consumes(MediaType.APPLICATION_FORM_URLENCODED) public void
-   * updateEvent(@FormParam("event") String eventIn) {
-   * System.out.println("EventsProvider.updateEvent()"); if (eventIn == null) {
-   * throw new WebApplicationException(Response.Status.BAD_REQUEST); } try {
-   * JSONObject event = new JSONObject(eventIn); System.out.println("Event: " +
-   * event); //boolean updated = EventDao.updateEvent(event); } catch
-   * (JSONException e) { // TODO Auto-generated catch block e.printStackTrace();
-   * } }
-   */
-
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
-  public Response createOrUpdateEvent(Event event) throws MyException {
+  public Response createOrUpdateEvent(Event event) throws Exception {
     log.info("Event: " + event);
     // boolean created
 
     if (event.getServer_id() == null) {
       // insert
       String rowid = null;
-      try {
-        rowid = EventManager.processCreateEvent(event);
-      }
-      catch (Exception e) {
-        processServerError(e);
-      }
+      rowid = EventManager.processCreateEvent(event);
       URI createdUri = URI.create(rowid);// TODO null pointer ex
       log.info("created: " + rowid);
       return Response.created(createdUri).build();
 
     }
-    else {
+    else {// TODO tohle je ted zbytecne
       // update
       boolean updated = false;
-      try {
-        updated = EventManager.processUpdateEvent(event);
-      }
-      catch (Exception e) {
-        processServerError(e);
-      }
+      updated = EventManager.processUpdateEvent(event);
       log.info("updated: " + updated);
       return Response.status(Response.Status.ACCEPTED).build();
     }
   }
-  
+
   @PUT
   @Path("{rowid}")
   @Consumes(MediaType.APPLICATION_JSON)
-  public Response updateEvent(Event event) throws MyException {
+  public Response updateEvent(Event event) throws Exception {
     log.info("updateEvent Event: " + event);
-    boolean updated = false;
-    try {
-      updated = EventManager.processUpdateEvent(event);
-    }
-    catch (Exception e) {
-      processServerError(e);
-    }
+    boolean updated = EventManager.processUpdateEvent(event);
     log.info("updated: " + updated);
     return Response.status(Response.Status.ACCEPTED).build();
   }
-
-  private void processServerError(Exception e) throws MyException {
-    log.warning(e.getMessage());
-    //throw new MyException(e.getMessage(), Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-    throw new MyException(e.getMessage());
-  }
-
-  
 
 }

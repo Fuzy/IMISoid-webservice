@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static database.DatabaseUtility.*;
-import exceptions.FormTriggerFailureException;
+import exceptions.ClientErrorException;
 
 public class BArchivLibrary {
 
@@ -22,7 +22,7 @@ public class BArchivLibrary {
     return connectionManager.getConnection();
   }*/
   
-  public static boolean lzeVlozit(String icp, long date, Connection conn) throws SQLException, FormTriggerFailureException {
+  public static boolean lzeVlozit(String icp, long date, Connection conn) throws SQLException, ClientErrorException {
     //Connection conn = null;
     PreparedStatement stmt = null;
     ResultSet rset = null;
@@ -47,7 +47,7 @@ public class BArchivLibrary {
         Konec = dateToMsSinceEpoch(rset.getDate(4));
       }
       else {
-        throw new FormTriggerFailureException("BLB-03401: Nenalezeno požadované ICP zaměstnance.");
+        throw new ClientErrorException("BLB-03401: Nenalezeno požadované ICP zaměstnance.");
       }
       System.out.println("VDatum: " + VDatum + " PomerOd: " + PomerOd + " PomerDo: " + PomerDo
           + " Vyneti: " + Vyneti + " Konec: " + Konec);

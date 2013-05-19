@@ -15,7 +15,7 @@ import database.connection.ConnectionManager;
 import database.dao.EventDao;
 import database.lib.BArchivLibrary;
 import database.lib.DatabaseStoredProcedures;
-import exceptions.FormTriggerFailureException;
+import exceptions.ClientErrorException;
 
 public class EventManager {
   private static Logger log = Logger.getLogger("imisoid");
@@ -36,8 +36,8 @@ public class EventManager {
     return connectionManager.getConnection();
   }
 
-  public static String processCreateEvent(Event event) throws Exception,
-      FormTriggerFailureException {//TODO vyjimky nejak royumne
+  public static String processCreateEvent(Event event) throws Exception
+       {
     log.info("");
     String rowid = null;
     try {
@@ -62,11 +62,11 @@ public class EventManager {
   }
 
   private static void applyPreInsertBussinesLogic(Event event) throws SQLException,
-      FormTriggerFailureException {
+  ClientErrorException {
     log.info("");
     boolean lzeVlozit = BArchivLibrary.lzeVlozit(event.getIcp(), event.getDatum(), conn);
     if (lzeVlozit == false) {
-      throw new FormTriggerFailureException(
+      throw new ClientErrorException(
           "Nelze vložit záznam s datem neodpovídajícím pracovnímu poměru.");
     }
     // nastavit typ 'O' nebo 'P' - asi klient

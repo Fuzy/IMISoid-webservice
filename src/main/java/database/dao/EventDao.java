@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import exceptions.FormTriggerFailureException;
+import exceptions.ClientErrorException;
 
 import model.Event;
 
@@ -38,7 +38,7 @@ public class EventDao {
       + " set icp=?, datum=?, kod_po=?, druh=?, cas=?, ic_obs=?, typ=?, datum_zmeny=?, poznamka=?  where rowid=?";
 
   public static String createEvent(Event event, Connection conn) throws SQLException,
-      FormTriggerFailureException {
+  ClientErrorException {
     // Connection conn = null;
     OraclePreparedStatement stmt = null;
     ResultSet rset = null;

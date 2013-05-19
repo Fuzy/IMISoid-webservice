@@ -8,24 +8,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
-import exceptions.FormTriggerFailureException;
-import exceptions.ValidationException;
+import exceptions.ClientErrorException;
 
-import manager.EventManager;
 import model.Event;
 
 public class EventValidator {
   private static Logger log = Logger.getLogger("imisoid");
 
   public static void validateEvent(Event event, Connection conn) throws SQLException,
-      ValidationException, FormTriggerFailureException {
+      ClientErrorException {
     validateICP(event.getIcp(), conn);
     validateDruh(event.getDruh(), conn);
     validateKod_po(event.getKod_po(), event.getDruh(), conn);
   }
 
   private static void validateICP(String icp, Connection conn) throws SQLException,
-      ValidationException {
+      ClientErrorException {
     PreparedStatement stmt = null;
     ResultSet rset = null;
     try {
@@ -36,7 +34,7 @@ public class EventValidator {
 
       boolean found = rset.next();
       if (found == false)
-        throw new ValidationException("Chybný kód zaměstnance.");
+        throw new ClientErrorException("Chybný kód zaměstnance.");
     }
     catch (SQLException e) {
       throw e;
@@ -50,14 +48,14 @@ public class EventValidator {
 
   }
 
-  private static void validateDruh(String druh, Connection conn) throws ValidationException {
+  private static void validateDruh(String druh, Connection conn) throws ClientErrorException {
     if ((druh.equals("P") || druh.equals("O")) == false) {
-      throw new ValidationException("Povolené hodnoty jsou P (Příchod), O (Odchod).");
+      throw new ClientErrorException("Povolené hodnoty jsou P (Příchod), O (Odchod).");
     }
   }
 
   private static void validateKod_po(String kod_po, String druh, Connection conn)
-      throws ValidationException, SQLException, FormTriggerFailureException {
+      throws ClientErrorException, SQLException {
     PreparedStatement stmt = null;
     ResultSet rset = null;
     String priznak;
@@ -72,14 +70,14 @@ public class EventValidator {
       if (found) {
         priznak = rset.getString(4);
         if (druh.equals("P") && ("P-".indexOf(priznak) == -1)) {
-          throw new FormTriggerFailureException("Skupinu " + kod_po + " nelze použít při příchodu.");
+          throw new ClientErrorException("Skupinu " + kod_po + " nelze použít při příchodu.");
         }
         if (druh.equals("O") && ("NO-".indexOf(priznak) == -1)) {
-          throw new FormTriggerFailureException("Skupinu " + kod_po + " nelze použít při odchodu.");
+          throw new ClientErrorException("Skupinu " + kod_po + " nelze použít při odchodu.");
         }
       }
       else {
-        throw new FormTriggerFailureException("Tabulka kod_doby neobsahuje hodnotu " + kod_po);
+        throw new ClientErrorException("Tabulka kod_doby neobsahuje hodnotu " + kod_po);
       }
 
     }

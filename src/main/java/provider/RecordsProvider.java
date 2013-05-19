@@ -14,7 +14,6 @@ import javax.ws.rs.core.Response;
 import manager.RecordManager;
 import model.Record;
 
-import exceptions.MyException;
 
 @Path("/records")
 public class RecordsProvider {
@@ -24,7 +23,7 @@ public class RecordsProvider {
   @Path("{username}")//TODO icp vs username
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
   public Response getRecordsForUser(@PathParam("username") String username,
-      @QueryParam("from") String from, @QueryParam("to") String to) throws MyException {
+      @QueryParam("from") String from, @QueryParam("to") String to) throws Exception {
     log.info("user: " + username + " from: " + from + " to: " + to);
     List<Record> records = null;
     try {
@@ -40,9 +39,9 @@ public class RecordsProvider {
     return Response.ok(records).build();
   }
   
-  private void processServerError(Exception e) throws MyException {
+  private void processServerError(Exception e) throws Exception {
     log.warning(e.getMessage());
     //throw new MyException(e.getMessage(), Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-    throw new MyException(e.getMessage());
+    throw new Exception(e.getMessage());
   }
 }

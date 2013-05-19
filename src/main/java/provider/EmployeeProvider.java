@@ -15,13 +15,12 @@ import javax.ws.rs.core.Response;
 import database.connection.ConnectionManager;
 import database.dao.EmployeeDao;
 
-import exceptions.MyException;
 import model.Employee;
 
 @Path("/employees")
 public class EmployeeProvider {
   private static Logger log = Logger.getLogger("imisoid");
-  
+
   private static ConnectionManager connectionManager;
   private static Connection conn = null;
 
@@ -37,39 +36,40 @@ public class EmployeeProvider {
     log.info("---Zacinam spojeni---");
     return connectionManager.getConnection();
   }
-  
+
   @GET
-  @Path("{icp}")//TODO icp vs username
+  @Path("{icp}")
+  // TODO icp vs username
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-  public Response getRecordsForUser(@PathParam("icp") String icp) throws MyException {
+  public Response getEmployeesForUser(@PathParam("icp") String icp) throws Exception {
     log.info("");
     List<Employee> employees = null;
     try {
       conn = getConnection();
-      employees =  EmployeeDao.getRecords(icp, conn);
+      employees = EmployeeDao.getRecords(icp, conn);
     }
     catch (SQLException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-   
+
     return Response.ok(employees).build();
   }
-  
+
   @GET
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-  public Response getLastRecords() throws MyException {
+  public Response getLastRecords() throws Exception {
     log.info("");
     List<Employee> employees = null;
     try {
       conn = getConnection();
-      employees =  EmployeeDao.getLastRecords(conn);
+      employees = EmployeeDao.getLastRecords(conn);
     }
     catch (SQLException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-   
+
     return Response.ok(employees).build();
   }
 

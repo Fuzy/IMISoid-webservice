@@ -15,7 +15,7 @@ import model.Employee;
 public class EmployeeDao {
   private static Logger log = Logger.getLogger("imisoid");
   private static final String SQL_GET_EMPLOYEES = ""
-      + "select '1' as \"SUB\",z.icp, o.kodpra from zamestnanec z, osoba o "
+      + "select '1' as \"SUB\",z.icp,z.jmeno,o.kodpra from zamestnanec z, osoba o "
       + "where z.icp = o.oscislo and z.pomer_do >= '31.12.2008' and z.icp_ved like ? "
       + "union " + "select '0' as \"SUB\",z.icp, o.kodpra from zamestnanec z, osoba o "
       + "where z.icp = o.oscislo and z.pomer_do >= '31.12.2008' and z.icp_ved not like ?";

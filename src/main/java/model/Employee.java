@@ -16,16 +16,18 @@ public class Employee {
   private long lastEventTime;
   private String kod_po;
   private String druh;
+  private String jmeno;
 
   public Employee() {
     this.lastEventTime = 0;
   }
 
-  public Employee(String icp, String kodpra, boolean isSubordinate, long lastEventTime,
-      String kod_po, String druh) {
+  public Employee(String icp, String kodpra, String jmeno, boolean isSubordinate,
+      long lastEventTime, String kod_po, String druh) {
     super();
     this.icp = icp;
     this.kodpra = kodpra;
+    this.jmeno = jmeno;
     this.isSubordinate = isSubordinate;
     this.lastEventTime = lastEventTime;
     this.kod_po = kod_po;
@@ -84,6 +86,14 @@ public class Employee {
     this.druh = druh;
   }
 
+  public String getJmeno() {
+    return jmeno;
+  }
+
+  public void setJmeno(String jmeno) {
+    this.jmeno = jmeno;
+  }
+
   public static Employee resultSetToEmployee(ResultSet rsSet) throws SQLException {
     Employee employee = new Employee();
     if (hasColumn(rsSet, COL_ICP)) {
@@ -91,6 +101,9 @@ public class Employee {
     }
     if (hasColumn(rsSet, COL_KODPRA)) {
       employee.setKodpra(rsSet.getString(COL_KODPRA));
+    }
+    if (hasColumn(rsSet, COL_JMENO)) {
+      employee.setJmeno(rsSet.getString(COL_JMENO));
     }
     if (hasColumn(rsSet, COL_SUB)) {
       employee.setSubordinate(rsSet.getBoolean(COL_SUB));
@@ -114,7 +127,8 @@ public class Employee {
   @Override
   public String toString() {
     return "Employee [icp=" + icp + ", kodpra=" + kodpra + ", isSubordinate=" + isSubordinate
-        + ", lastEventTime=" + formatDateAndTime(lastEventTime) + ", kod_po=" + kod_po + ", druh=" + druh + "]";
+        + ", lastEventTime=" + lastEventTime + ", kod_po=" + kod_po + ", druh=" + druh + ", jmeno="
+        + jmeno + "]";
   }
 
   private static String COL_ICP = "ICP";
@@ -124,5 +138,6 @@ public class Employee {
   private static String COL_KOD_PO = "KOD_PO";
   private static String COL_DRUH = "DRUH";
   private static String COL_CAS = "CAS";
+  private static String COL_JMENO = "JMENO";
 
 }
