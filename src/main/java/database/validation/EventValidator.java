@@ -44,9 +44,35 @@ public class EventValidator {
     }
   }
 
-  private static void validateHeslo(String heslo, Connection conn) {
+  /*public static boolean validateHeslo(String icp, String heslo, Connection conn)
+      throws SQLException {
+    CallableStatement callableStatement = null;
+    BigDecimal bool;
+    boolean match = false;
 
-  }
+    String SpravneHeslo = "{? = call IMISOID_HESLO_WRAPPER(?, ?)}";
+    try {
+      callableStatement = conn.prepareCall(SpravneHeslo);
+      callableStatement.setQueryTimeout(5);
+      callableStatement.setString(1, icp);
+      callableStatement.setString(2, heslo);
+      callableStatement.registerOutParameter(1, OracleTypes.NUMBER);
+      callableStatement.executeUpdate();
+      bool = callableStatement.getBigDecimal(1);
+
+      log.info("bool " + bool);
+      if (bool.compareTo(BigDecimal.ONE) == 0)
+        match = true;
+      log.info("match " + match);
+    }
+    catch (SQLException e) {
+      e.printStackTrace();
+    }
+    finally {
+      closeConnection(null, callableStatement, null);      
+    }
+    return match;
+  }*/
 
   private static void validateDruh(String druh, Connection conn) throws ClientErrorException {
     if ((druh.equals("P") || druh.equals("O")) == false) {

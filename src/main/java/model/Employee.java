@@ -16,18 +16,18 @@ public class Employee {
   private long lastEventTime;
   private String kod_po;
   private String druh;
-  private String jmeno;
+  private String name;
 
   public Employee() {
     this.lastEventTime = 0;
   }
 
-  public Employee(String icp, String kodpra, String jmeno, boolean isSubordinate,
+  public Employee(String icp, String kodpra, String name, boolean isSubordinate,
       long lastEventTime, String kod_po, String druh) {
     super();
     this.icp = icp;
     this.kodpra = kodpra;
-    this.jmeno = jmeno;
+    this.name = name;
     this.isSubordinate = isSubordinate;
     this.lastEventTime = lastEventTime;
     this.kod_po = kod_po;
@@ -86,12 +86,12 @@ public class Employee {
     this.druh = druh;
   }
 
-  public String getJmeno() {
-    return jmeno;
+  public String getName() {
+    return name;
   }
 
-  public void setJmeno(String jmeno) {
-    this.jmeno = jmeno;
+  public void setName(String name) {
+    this.name = name;
   }
 
   public static Employee resultSetToEmployee(ResultSet rsSet) throws SQLException {
@@ -103,7 +103,7 @@ public class Employee {
       employee.setKodpra(rsSet.getString(COL_KODPRA));
     }
     if (hasColumn(rsSet, COL_JMENO)) {
-      employee.setJmeno(rsSet.getString(COL_JMENO));
+      employee.setName(rsSet.getString(COL_JMENO));
     }
     if (hasColumn(rsSet, COL_SUB)) {
       employee.setSubordinate(rsSet.getBoolean(COL_SUB));
@@ -124,12 +124,16 @@ public class Employee {
     return employee;
   }
 
+  
+
   @Override
   public String toString() {
     return "Employee [icp=" + icp + ", kodpra=" + kodpra + ", isSubordinate=" + isSubordinate
-        + ", lastEventTime=" + lastEventTime + ", kod_po=" + kod_po + ", druh=" + druh + ", jmeno="
-        + jmeno + "]";
+        + ", lastEventTime=" + lastEventTime + ", kod_po=" + kod_po + ", druh=" + druh + ", name="
+        + name + "]";
   }
+
+
 
   private static String COL_ICP = "ICP";
   private static String COL_KODPRA = "KODPRA";

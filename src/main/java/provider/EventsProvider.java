@@ -22,7 +22,6 @@ import javax.ws.rs.core.UriInfo;
 import manager.EventManager;
 import model.Event;
 
-import database.connection.TestConnection;
 
 @Path("/events")
 public class EventsProvider {
@@ -55,7 +54,7 @@ public class EventsProvider {
    */
 
   // TODO WS ok - 200, DB - ne ok 503 (jinak 404)
-  @GET
+  /*@GET
   @Produces({ MediaType.TEXT_PLAIN + ";charset=utf-8", MediaType.TEXT_HTML + ";charset=utf-8" })
   public Response test() {
     log.info("");
@@ -67,7 +66,7 @@ public class EventsProvider {
       return Response.ok("Test spojení neúspěšný: " + e.getMessage()).status(500).build();// TODO
     }
     return Response.ok("Test spojení úspěšný: " + result).build();
-  }
+  }*/
 
   // http://localhost:8080/Imisoid_WS/events/0000001?from=29.7.2004&to=30.7.2004
   // ?from={from}&to={to}"

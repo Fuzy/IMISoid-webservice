@@ -47,13 +47,13 @@ public class TestProvider {
            */
 
     // Records
-    Record record = new Record(new BigDecimal("1"), 1364166000000L, "KDA", "R-VV-2013", "V", 13,
+    Record record = new Record(new BigDecimal("1"), 1368658800000L, "TST", "R-VV-2013", "V", 13,
         15, 28800000L, "hlaseni", "ukol", "moc prace");
     recordsList.add(record);
-    record = new Record(new BigDecimal("2"), 1364166000000L, "KDA", "A-VV-2013", "V", 13, 15,
+    record = new Record(new BigDecimal("2"), 1368658800000L, "TST", "A-VV-2013", "V", 13, 15,
         28800000L, "hlaseni", "ukol", "moc prace");
     recordsList.add(record);
-    record = new Record(new BigDecimal("3"), 1362528000000L, "JSA", "A-VV-2013", "V", 13, 15,
+    record = new Record(new BigDecimal("3"), 1368658800000L, "JSA", "A-VV-2013", "V", 13, 15,
         28800000L, "hlaseni", "ukol", "moc prace");
     recordsList.add(record);
 
@@ -67,13 +67,13 @@ public class TestProvider {
     employeesList.add(employee);
   }
 
-  @GET
+  /*@GET
   @Path("events")
   @Produces({ MediaType.TEXT_PLAIN + ";charset=utf-8", MediaType.TEXT_HTML + ";charset=utf-8" })
   public Response test() {
     log.info("");
     return Response.ok("Test spojení úspěšný").build();
-  }
+  }*/
 
   @DELETE
   @Path("events/{rowid}")
@@ -141,8 +141,8 @@ public class TestProvider {
   @GET
   @Path("employees/{icp}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-  public Response getEmployeesForUser(@PathParam("icp") String icp) {
-    log.info("");
+  public Response getEmployeesForUser(    @PathParam("icp") String icp) {
+    log.info("");    
     return Response.ok(employeesList).build();
   }
 
