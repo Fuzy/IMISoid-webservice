@@ -28,13 +28,16 @@ public class EmployeeDao {
   		"ROW_NUMBER() over (partition by ki.icp order by datum desc) rnk " +
   		"from karta ki where ki.datum > (sysdate - 100)) k where rnk = 1";
   //TODO mensi interval
+  
+  private static final String SQL_GET_LAST_EVENT_FOR_EMPLOYEE = "";//TODO
+  private static final String SQL_GET_EMPLOYEE = "select z.icp, z.jmeno, o.kodpra from zamestnanec z, osoba o where z.icp like ? and z.icp = o.oscislo";
 
-  public static List<Employee> getRecords(String icp, Connection conn) throws SQLException {
+  public static List<Employee> getEmployees(String icp, Connection conn) throws SQLException {
     //icp = "1493913";
     log.info("");
     
     PreparedStatement stmt = null;
-    ResultSet rset = null;
+    ResultSet rset = null; 
     List<Employee> employees = new ArrayList<Employee>();
 
     try {
@@ -61,7 +64,7 @@ public class EmployeeDao {
     return employees;
   }
   
-  public static List<Employee> getLastRecords(Connection conn) throws SQLException {
+  public static List<Employee> getLastEvents(Connection conn) throws SQLException {
     PreparedStatement stmt = null;
     ResultSet rset = null;
     List<Employee> employees = new ArrayList<Employee>();
@@ -85,5 +88,15 @@ public class EmployeeDao {
     }
     
     return employees;
+  }
+  
+  public static Employee getLastEventForEmployee(Connection conn, String icp) throws SQLException {
+    log.info("");
+    return null;
+  }
+  
+  public static Employee getEmployee(Connection conn, String icp) throws SQLException {
+    log.info("");
+    return null;
   }
 }

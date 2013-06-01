@@ -109,7 +109,7 @@ public class Employee {
       employee.setSubordinate(rsSet.getBoolean(COL_SUB));
     }
     if (hasColumn(rsSet, COL_DATUM)) {
-      employee.addLastEventTime(dateToMsSinceEpoch(rsSet.getDate(COL_DATUM)));
+      employee.addLastEventTime(dateToMsSinceEpoch(rsSet.getDate(COL_DATUM)));//TODO jako 2 polozky
     }
     if (hasColumn(rsSet, COL_KOD_PO)) {
       employee.setKod_po(rsSet.getString(COL_KOD_PO));
@@ -118,7 +118,7 @@ public class Employee {
       employee.setDruh(rsSet.getString(COL_DRUH));
     }
     if (hasColumn(rsSet, COL_CAS)) {
-      employee.addLastEventTime(timeFromDayDoubleToDayMs(rsSet.getLong(COL_CAS)));
+      employee.addLastEventTime(timeFromDayDoubleToDayMs(rsSet.getLong(COL_CAS)));//TODO jako 2 polozky
     }
 
     return employee;

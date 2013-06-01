@@ -57,23 +57,25 @@ public class TestProvider {
         28800000L, "hlaseni", "ukol", "moc prace");
     recordsList.add(record);
 
-    Employee employee = new Employee("123", "ABC", "Pepa Zdepa", false, 1364166000000L, "00", "P");
+    Employee employee = new Employee("123", "ABC", "Pepa Zdepa", false, 1364169500000L, "00", "P");
     employeesList.add(employee);
     employee = new Employee("345", "CDE", "Jára Mára", false, 1360000000000L, "03", "O");
     employeesList.add(employee);
     employee = new Employee("456", "EFG", "Jára Mára", false, 1360000000000L, "03", "O");
     employeesList.add(employee);
-    employee = new Employee("234", "BCD", "Jára Mára", false, 1360000000000L, "00", "P");
+    employee = new Employee("TST", "TST", "Jára Mára", false, 1360000000000L, "00", "P");
     employeesList.add(employee);
   }
 
-  /*@GET
-  @Path("events")
-  @Produces({ MediaType.TEXT_PLAIN + ";charset=utf-8", MediaType.TEXT_HTML + ";charset=utf-8" })
-  public Response test() {
-    log.info("");
-    return Response.ok("Test spojení úspěšný").build();
-  }*/
+  /*
+   * @GET
+   * 
+   * @Path("events")
+   * 
+   * @Produces({ MediaType.TEXT_PLAIN + ";charset=utf-8", MediaType.TEXT_HTML +
+   * ";charset=utf-8" }) public Response test() { log.info(""); return
+   * Response.ok("Test spojení úspěšný").build(); }
+   */
 
   @DELETE
   @Path("events/{rowid}")
@@ -131,9 +133,9 @@ public class TestProvider {
   }
 
   @GET
-  @Path("employees")
+  @Path("employees/lastevents")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-  public Response getLastRecords() {
+  public Response getLastEvents() {
     log.info("");
     return Response.ok(employeesList).build();
   }
@@ -141,9 +143,25 @@ public class TestProvider {
   @GET
   @Path("employees/{icp}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-  public Response getEmployeesForUser(    @PathParam("icp") String icp) {
-    log.info("");    
+  public Response getEmployeesForUser(@PathParam("icp") String icp) {
+    log.info("");
     return Response.ok(employeesList).build();
+  }
+
+  @GET
+  @Path("employees/lastevent/{icp}")
+  @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+  public Response getLastEventForEmployee(@PathParam("icp") String icp) {
+    log.info("");
+    Employee emp = null;
+    for (Employee employee : employeesList) {
+      if (employee.getIcp().equals(icp))
+        emp = employee;
+    }
+    if (emp == null)
+      return Response.status(Response.Status.NO_CONTENT).build();
+
+    return Response.ok(emp).build();//TODO
   }
 
   @GET
@@ -176,6 +194,20 @@ public class TestProvider {
     if (records.isEmpty())
       return Response.status(Response.Status.NO_CONTENT).build();
     return Response.ok(recordsList).build();
+  }
+  
+  @GET
+  @Path("employee/{icp}")
+  @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+  public Response getEmployee(@PathParam("icp") String icp) {
+    log.info("");
+    Employee emp = null;
+    for (Employee employee : employeesList) {
+      if (employee.getIcp().equals(icp))
+        emp = employee;
+    }
+    //TODO
+    return Response.ok(emp).build();
   }
 
 }

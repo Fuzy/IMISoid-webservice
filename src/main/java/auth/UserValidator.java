@@ -65,6 +65,7 @@ public class UserValidator {
 
   public static boolean validateTestUser(String authorization) {
     String[] credentials = parseCredentials(authorization);
+    if (credentials[1] == null) return false;
     if (credentials[0].equals(ICP) && credentials[1].equals(PASS))
       return true;
     return false;
@@ -92,12 +93,12 @@ public class UserValidator {
     log.info("s:" + s);
     byte[] pair = javax.xml.bind.DatatypeConverter.parseBase64Binary(s);
     String pairStr = new String(pair);
-
-    String[] credentials = pairStr.split(":");
-    String icp = credentials[0];
-    String heslo = credentials[1];
-    log.info("icp: " + icp);
-    log.info("heslo: " + heslo);
+    String[] tmp = pairStr.split(":");
+    String[] credentials = new String[2];
+    credentials[0] = tmp[0];
+    credentials[1] = (tmp.length > 1) ? tmp[1] : null;
+    log.info("icp: " + credentials[0]);
+    log.info("heslo: " + credentials[1]);
     return credentials;
   }
 }

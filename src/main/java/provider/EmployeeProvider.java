@@ -46,7 +46,7 @@ public class EmployeeProvider {
     List<Employee> employees = null;
     try {
       conn = getConnection();
-      employees = EmployeeDao.getRecords(icp, conn);
+      employees = EmployeeDao.getEmployees(icp, conn);
     }
     catch (SQLException e) {
       // TODO Auto-generated catch block
@@ -57,13 +57,14 @@ public class EmployeeProvider {
   }
 
   @GET
+  @Path("lastevents")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-  public Response getLastRecords() throws Exception {
+  public Response getLastEvents() throws Exception {
     log.info("");
     List<Employee> employees = null;
     try {
       conn = getConnection();
-      employees = EmployeeDao.getLastRecords(conn);
+      employees = EmployeeDao.getLastEvents(conn);
     }
     catch (SQLException e) {
       // TODO Auto-generated catch block
@@ -71,6 +72,24 @@ public class EmployeeProvider {
     }
 
     return Response.ok(employees).build();
+  }
+
+  @GET
+  @Path("lastevents/{icp}")
+  @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+  public Response getLastEvent(@PathParam("icp") String icp) throws Exception {
+    log.info("");
+    Employee employee = null;
+    try {
+      conn = getConnection();
+      employee = EmployeeDao.getLastEventForEmployee(conn, icp);
+    }
+    catch (SQLException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    // TODO null NO_CONTENT
+    return Response.ok(employee).build();
   }
 
 }
