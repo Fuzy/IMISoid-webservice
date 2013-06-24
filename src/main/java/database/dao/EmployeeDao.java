@@ -14,40 +14,40 @@ import model.Employee;
 
 public class EmployeeDao {
   private static Logger log = Logger.getLogger("imisoid");
+  private static final String DAYS_LIMIT = "100";// TODO mensi interval,
+                                                 // konfiguracni udaj
   private static final String SQL_GET_EMPLOYEES = ""
       + "select '1' as \"SUB\",z.icp,z.jmeno,o.kodpra from zamestnanec z, osoba o "
-      + "where z.icp = o.oscislo and z.pomer_do >= '31.12.2008' and z.icp_ved like ? "
-      + "union " + "select '0' as \"SUB\",z.icp, o.kodpra from zamestnanec z, osoba o "
+      + "where z.icp = o.oscislo and z.pomer_do >= '31.12.2008' and z.icp_ved like ? " + "union "
+      + "select '0' as \"SUB\",z.icp,z.jmeno,o.kodpra from zamestnanec z, osoba o "
       + "where z.icp = o.oscislo and z.pomer_do >= '31.12.2008' and z.icp_ved not like ?";
-  //TODO to vraci i pro neextistuici icp
+  // TODO to vraci i pro neextistuici icp
 
-  // TODO TO_CHAR (SYSDATE, 'MM-DD-YYYY')
-  
-  private static final String SQL_GET_EMPLOYEES_LAST_EVENT = "select k.icp, k.datum, k.kod_po, k.druh, k.cas " +
-  		"from (select ki.icp, ki.datum, ki.kod_po, ki.druh, ki.cas, " +
-  		"ROW_NUMBER() over (partition by ki.icp order by datum desc) rnk " +
-  		"from karta ki where ki.datum > (sysdate - 100)) k where rnk = 1";
-  //TODO mensi interval
-  
-  private static final String SQL_GET_LAST_EVENT_FOR_EMPLOYEE = "";//TODO
+  private static final String SQL_GET_EMPLOYEES_LAST_EVENT = "select k.icp, k.datum, k.kod_po, k.druh, k.cas "
+      + "from (select ki.icp, ki.datum, ki.kod_po, ki.druh, ki.cas, "
+      + "ROW_NUMBER() over (partition by ki.icp order by datum desc, cas desc) rnk "
+      + "from karta ki where ki.datum > (sysdate - " + DAYS_LIMIT + ")) k where rnk = 1";
+
+  private static final String SQL_GET_LAST_EVENT_FOR_EMPLOYEE = "select * from "
+      + "(select k.icp, k.datum, k.kod_po, k.druh, k.cas from karta k "
+      + "where k.datum > (sysdate - " + DAYS_LIMIT + ") and k.icp like ? "
+      + "order by k.datum desc, k.cas desc) where rownum <=1";
   private static final String SQL_GET_EMPLOYEE = "select z.icp, z.jmeno, o.kodpra from zamestnanec z, osoba o where z.icp like ? and z.icp = o.oscislo";
 
   public static List<Employee> getEmployees(String icp, Connection conn) throws SQLException {
-    //icp = "1493913";
     log.info("");
-    
-    PreparedStatement stmt = null;
-    ResultSet rset = null; 
-    List<Employee> employees = new ArrayList<Employee>();
 
+    PreparedStatement stmt = null;
+    ResultSet rset = null;
+    List<Employee> employees = new ArrayList<Employee>();
+    // TODO kontrola zda zamestnanec existuje
     try {
-      //TODO test existence
       stmt = conn.prepareStatement(SQL_GET_EMPLOYEES);
       stmt.setString(1, icp);
       stmt.setString(2, icp);
       rset = stmt.executeQuery();
       while (rset.next()) {
-        Employee employee  = Employee.resultSetToEmployee(rset);
+        Employee employee = Employee.resultSetToEmployee(rset);
         employees.add(employee);
         System.out.println(employee);
       }
@@ -60,10 +60,10 @@ public class EmployeeDao {
     finally {
       closeConnection(null, stmt, rset);
     }
-    
+
     return employees;
   }
-  
+
   public static List<Employee> getLastEvents(Connection conn) throws SQLException {
     PreparedStatement stmt = null;
     ResultSet rset = null;
@@ -73,7 +73,7 @@ public class EmployeeDao {
       stmt = conn.prepareStatement(SQL_GET_EMPLOYEES_LAST_EVENT);
       rset = stmt.executeQuery();
       while (rset.next()) {
-        Employee employee  = Employee.resultSetToEmployee(rset);
+        Employee employee = Employee.resultSetToEmployee(rset);
         employees.add(employee);
         System.out.println(employee);
       }
@@ -86,17 +86,63 @@ public class EmployeeDao {
     finally {
       closeConnection(null, stmt, rset);
     }
-    
+
     return employees;
   }
-  
-  public static Employee getLastEventForEmployee(Connection conn, String icp) throws SQLException {
+
+  public static Employee getLastEventForEmployee(String icp, Connection conn) throws SQLException {
     log.info("");
-    return null;
+
+    PreparedStatement stmt = null;
+    ResultSet rset = null;
+    Employee employee = null;
+
+    try {
+      stmt = conn.prepareStatement(SQL_GET_LAST_EVENT_FOR_EMPLOYEE);
+      stmt.setString(1, icp);
+      rset = stmt.executeQuery();
+      while (rset.next()) {
+        employee = Employee.resultSetToEmployee(rset);
+        System.out.println(employee);
+      }
+    }
+    catch (SQLException e) {
+      log.warning(e.getMessage());
+      e.printStackTrace();// TODO
+      throw e;
+    }
+    finally {
+      closeConnection(null, stmt, rset);
+    }
+
+    return employee;
   }
-  
-  public static Employee getEmployee(Connection conn, String icp) throws SQLException {
+
+  public static Employee getEmployee(String icp, Connection conn) throws SQLException {
     log.info("");
-    return null;
+
+    PreparedStatement stmt = null;
+    ResultSet rset = null;
+    Employee employee = null;
+
+    try {
+      stmt = conn.prepareStatement(SQL_GET_EMPLOYEE);
+      stmt.setString(1, icp);
+      rset = stmt.executeQuery();
+      while (rset.next()) {
+        employee = Employee.resultSetToEmployee(rset);
+        System.out.println(employee);
+      }
+    }
+    catch (SQLException e) {
+      log.warning(e.getMessage());
+      e.printStackTrace();// TODO
+      throw e;
+    }
+    finally {
+      closeConnection(null, stmt, rset);
+    }
+
+    return employee;
   }
 }

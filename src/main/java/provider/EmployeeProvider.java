@@ -39,7 +39,25 @@ public class EmployeeProvider {
 
   @GET
   @Path("{icp}")
-  // TODO icp vs username
+  @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+  public Response getEmployee(@PathParam("icp") String icp) throws Exception {
+    log.info("icp: " + icp);
+    Employee employee = null;
+    try {
+      conn = getConnection();
+      employee = EmployeeDao.getEmployee(icp, conn);
+    }
+    catch (SQLException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
+    return Response.ok(employee).build();
+  }
+
+  @GET
+  @Path("all/{icp}")
+  // TODO seznam vsech
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
   public Response getEmployeesForUser(@PathParam("icp") String icp) throws Exception {
     log.info("");
@@ -82,7 +100,7 @@ public class EmployeeProvider {
     Employee employee = null;
     try {
       conn = getConnection();
-      employee = EmployeeDao.getLastEventForEmployee(conn, icp);
+      employee = EmployeeDao.getLastEventForEmployee(icp, conn);
     }
     catch (SQLException e) {
       // TODO Auto-generated catch block

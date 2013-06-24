@@ -35,6 +35,7 @@ public class UserValidator {
 
   public static boolean validateHeslo(String icp, String heslo, Connection conn)
       throws SQLException {
+    log.info("");
     CallableStatement callableStatement = null;
     BigDecimal bool;
     boolean match = false;
@@ -43,8 +44,8 @@ public class UserValidator {
     try {
       callableStatement = conn.prepareCall(SpravneHeslo);
       callableStatement.setQueryTimeout(5);
-      callableStatement.setString(1, icp);
-      callableStatement.setString(2, heslo);
+      callableStatement.setString(2, icp);
+      callableStatement.setString(3, heslo);
       callableStatement.registerOutParameter(1, OracleTypes.NUMBER);
       callableStatement.executeUpdate();
       bool = callableStatement.getBigDecimal(1);
@@ -65,7 +66,8 @@ public class UserValidator {
 
   public static boolean validateTestUser(String authorization) {
     String[] credentials = parseCredentials(authorization);
-    if (credentials[1] == null) return false;
+    if (credentials[1] == null)
+      return false;
     if (credentials[0].equals(ICP) && credentials[1].equals(PASS))
       return true;
     return false;
@@ -75,30 +77,27 @@ public class UserValidator {
     String[] credentials = parseCredentials(authorization);
     try {
       conn = getConnection();
+      return UserValidator.validateHeslo(credentials[0], credentials[1], conn);
     }
     catch (SQLException e) {
-      conn.rollback();
-      // e.printStackTrace();
+      if (conn != null) conn.rollback();//TODO pokud spojeni neexistuje, null pointer exception
       throw e;
     }
     finally {
       closeConnection(conn, null, null);
     }
-    return UserValidator.validateHeslo(credentials[0], credentials[1], conn);
 
   }
 
   private static String[] parseCredentials(String authorization) {
     String s = authorization.substring(authorization.indexOf(" ") + 1);
-    log.info("s:" + s);
     byte[] pair = javax.xml.bind.DatatypeConverter.parseBase64Binary(s);
     String pairStr = new String(pair);
     String[] tmp = pairStr.split(":");
     String[] credentials = new String[2];
     credentials[0] = tmp[0];
     credentials[1] = (tmp.length > 1) ? tmp[1] : null;
-    log.info("icp: " + credentials[0]);
-    log.info("heslo: " + credentials[1]);
+    log.info("s:" + s + " icp: " + credentials[0] + "heslo: " + credentials[1]);
     return credentials;
   }
 }

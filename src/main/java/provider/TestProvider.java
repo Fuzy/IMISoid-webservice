@@ -47,23 +47,24 @@ public class TestProvider {
            */
 
     // Records
-    Record record = new Record(new BigDecimal("1"), 1368658800000L, "TST", "R-VV-2013", "V", 13,
+    Record record = new Record(new BigDecimal("1"), 1371337200000L, "TST", "R-VV-2013", "V", 13,
         15, 28800000L, "hlaseni", "ukol", "moc prace");
     recordsList.add(record);
-    record = new Record(new BigDecimal("2"), 1368658800000L, "TST", "A-VV-2013", "V", 13, 15,
+    record = new Record(new BigDecimal("2"), 1371337200000L, "TST", "A-VV-2013", "V", 13, 15,
         28800000L, "hlaseni", "ukol", "moc prace");
     recordsList.add(record);
-    record = new Record(new BigDecimal("3"), 1368658800000L, "JSA", "A-VV-2013", "V", 13, 15,
+    record = new Record(new BigDecimal("3"), 1371337200000L, "JSA", "A-VV-2013", "V", 13, 15,
         28800000L, "hlaseni", "ukol", "moc prace");
     recordsList.add(record);
 
-    Employee employee = new Employee("123", "ABC", "Pepa Zdepa", false, 1364169500000L, "00", "P");
+    Employee employee = new Employee("123", "ABC", "Pepa Zdepa", false, 1360000000000L, 28800000L,
+        "00", "P");
     employeesList.add(employee);
-    employee = new Employee("345", "CDE", "Jára Mára", false, 1360000000000L, "03", "O");
+    employee = new Employee("345", "CDE", "Jára Mára", false, 1360000000000L, 28800000L, "03", "O");
     employeesList.add(employee);
-    employee = new Employee("456", "EFG", "Jára Mára", false, 1360000000000L, "03", "O");
+    employee = new Employee("456", "EFG", "Jára Mára", false, 1360000000000L, 28800000L, "03", "O");
     employeesList.add(employee);
-    employee = new Employee("TST", "TST", "Jára Mára", false, 1360000000000L, "00", "P");
+    employee = new Employee("TST", "TST", "Jára Mára", false, 1360000000000L, 28800000L, "00", "P");
     employeesList.add(employee);
   }
 
@@ -123,6 +124,7 @@ public class TestProvider {
 
     // return as a list
     List<Event> events = new ArrayList<>();
+    //TODO podle data
     for (Map.Entry<String, Event> entry : eventsList.entrySet()) {
       String key = entry.getKey();
       Event value = entry.getValue();
@@ -141,7 +143,7 @@ public class TestProvider {
   }
 
   @GET
-  @Path("employees/{icp}")
+  @Path("employees/all/{icp}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
   public Response getEmployeesForUser(@PathParam("icp") String icp) {
     log.info("");
@@ -161,7 +163,7 @@ public class TestProvider {
     if (emp == null)
       return Response.status(Response.Status.NO_CONTENT).build();
 
-    return Response.ok(emp).build();//TODO
+    return Response.ok(emp).build();// TODO
   }
 
   @GET
@@ -195,9 +197,10 @@ public class TestProvider {
       return Response.status(Response.Status.NO_CONTENT).build();
     return Response.ok(recordsList).build();
   }
+//TODO opravit
   
   @GET
-  @Path("employee/{icp}")
+  @Path("employees/{icp}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
   public Response getEmployee(@PathParam("icp") String icp) {
     log.info("");
@@ -206,7 +209,7 @@ public class TestProvider {
       if (employee.getIcp().equals(icp))
         emp = employee;
     }
-    //TODO
+    // TODO
     return Response.ok(emp).build();
   }
 

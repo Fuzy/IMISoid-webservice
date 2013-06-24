@@ -1,7 +1,6 @@
 package auth;
 
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.logging.Logger;
 
 import javax.ws.rs.WebApplicationException;
@@ -16,19 +15,16 @@ public class AuthFilter implements ContainerRequestFilter {
 
   @Override
   public ContainerRequest filter(ContainerRequest request) {
-    log.info("path " + request.getPath());
     String[] splits = request.getPath().split("/");
-    log.info("splits " + Arrays.toString(splits));
     boolean isTestMode = false;
     if (splits.length > 0 && splits[0].equals(TEST_PATH)) {
       isTestMode = true;
     }
-    log.info("isTestMode " + isTestMode);
 
-    
     boolean isAuthorized = false;
     String authorization = request.getHeaderValue("Authorization");
-    log.info("authorization: " + authorization);
+    log.info("path " + request.getPath() + " isTestMode " + isTestMode + " Łauthorization: "
+        + authorization);
     if (authorization != null) {
       if (isTestMode) {
         isAuthorized = UserValidator.validateTestUser(authorization);

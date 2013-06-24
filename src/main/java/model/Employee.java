@@ -12,27 +12,31 @@ import static utilities.Util.*;
 public class Employee {
   private String icp;
   private String kodpra;
+  private String name;
   private boolean isSubordinate;
-  private long lastEventTime;
+  private long datum;
+  private long cas;
   private String kod_po;
   private String druh;
-  private String name;
+ 
 
   public Employee() {
-    this.lastEventTime = 0;
-  }
+    this.datum = 0;
+  }   
 
-  public Employee(String icp, String kodpra, String name, boolean isSubordinate,
-      long lastEventTime, String kod_po, String druh) {
+  public Employee(String icp, String kodpra, String name, boolean isSubordinate, long datum,
+      long cas, String kod_po, String druh) {
     super();
     this.icp = icp;
     this.kodpra = kodpra;
     this.name = name;
     this.isSubordinate = isSubordinate;
-    this.lastEventTime = lastEventTime;
+    this.datum = datum;
+    this.cas = cas;
     this.kod_po = kod_po;
     this.druh = druh;
   }
+
 
   public String getIcp() {
     return icp;
@@ -56,18 +60,22 @@ public class Employee {
 
   public void setSubordinate(boolean isSubordinate) {
     this.isSubordinate = isSubordinate;
+  }  
+
+  public long getDatum() {
+    return datum;
   }
 
-  public long getLastEventTime() {
-    return lastEventTime;
+  public void setDatum(long datum) {
+    this.datum = datum;
   }
 
-  public void setLastEventTime(long lastEventTime) {
-    this.lastEventTime = lastEventTime;
+  public long getCas() {
+    return cas;
   }
 
-  public void addLastEventTime(long lastEventTime) {
-    this.lastEventTime += lastEventTime;
+  public void setCas(long cas) {
+    this.cas = cas;
   }
 
   public String getKod_po() {
@@ -109,7 +117,7 @@ public class Employee {
       employee.setSubordinate(rsSet.getBoolean(COL_SUB));
     }
     if (hasColumn(rsSet, COL_DATUM)) {
-      employee.addLastEventTime(dateToMsSinceEpoch(rsSet.getDate(COL_DATUM)));//TODO jako 2 polozky
+      employee.setDatum(dateToMsSinceEpoch(rsSet.getDate(COL_DATUM)));
     }
     if (hasColumn(rsSet, COL_KOD_PO)) {
       employee.setKod_po(rsSet.getString(COL_KOD_PO));
@@ -118,22 +126,19 @@ public class Employee {
       employee.setDruh(rsSet.getString(COL_DRUH));
     }
     if (hasColumn(rsSet, COL_CAS)) {
-      employee.addLastEventTime(timeFromDayDoubleToDayMs(rsSet.getLong(COL_CAS)));//TODO jako 2 polozky
+      employee.setCas(timeFromDayDoubleToDayMs(rsSet.getLong(COL_CAS)));
     }
 
     return employee;
   }
 
-  
 
   @Override
   public String toString() {
     return "Employee [icp=" + icp + ", kodpra=" + kodpra + ", isSubordinate=" + isSubordinate
-        + ", lastEventTime=" + lastEventTime + ", kod_po=" + kod_po + ", druh=" + druh + ", name="
+        + ", datum=" + datum + ", cas=" + cas + ", kod_po=" + kod_po + ", druh=" + druh + ", name="
         + name + "]";
   }
-
-
 
   private static String COL_ICP = "ICP";
   private static String COL_KODPRA = "KODPRA";
