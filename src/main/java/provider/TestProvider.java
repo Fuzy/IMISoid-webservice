@@ -40,11 +40,13 @@ public class TestProvider {
   private static Map<String, Event> eventsList = new HashMap<>();
   private static int serverId = 1;
 
-  static {/*
-           * Event event = new Event("0", "123", 1364166000000L, "00", "P",
-           * 28000L, "KDA", "O", 1364166000000L, "poznamka ");
-           * eventsList.put(String.valueOf(serverId++), event);
-           */
+  static {
+    Event event = new Event("0", "123", 1371337200000L, "00", "P", 28000L, "ABC", "O",
+        1371337200000L, "poznamka ");
+    eventsList.put(String.valueOf(serverId++), event);
+    event = new Event("0", "123", 1371337200000L, "00", "O", 30000L, "ABC", "O",
+        1371337200000L, "poznamka ");
+    eventsList.put(String.valueOf(serverId++), event);
 
     // Records
     Record record = new Record(new BigDecimal("1"), 1371337200000L, "TST", "R-VV-2013", "V", 13,
@@ -60,23 +62,13 @@ public class TestProvider {
     Employee employee = new Employee("123", "ABC", "Pepa Zdepa", false, 1360000000000L, 28800000L,
         "00", "P");
     employeesList.add(employee);
-    employee = new Employee("345", "CDE", "Jára Mára", false, 1360000000000L, 28800000L, "03", "O");
+    employee = new Employee("345", "CDE", "Petr Svetr", true, 1360000000000L, 28800000L, "03", "O");
     employeesList.add(employee);
-    employee = new Employee("456", "EFG", "Jára Mára", false, 1360000000000L, 28800000L, "03", "O");
+    employee = new Employee("456", "EFG", "Jára Mára", true, 1360000000000L, 28800000L, "03", "O");
     employeesList.add(employee);
     employee = new Employee("TST", "TST", "Jára Mára", false, 1360000000000L, 28800000L, "00", "P");
     employeesList.add(employee);
   }
-
-  /*
-   * @GET
-   * 
-   * @Path("events")
-   * 
-   * @Produces({ MediaType.TEXT_PLAIN + ";charset=utf-8", MediaType.TEXT_HTML +
-   * ";charset=utf-8" }) public Response test() { log.info(""); return
-   * Response.ok("Test spojení úspěšný").build(); }
-   */
 
   @DELETE
   @Path("events/{rowid}")
@@ -101,7 +93,6 @@ public class TestProvider {
     eventsList.put(id, event);
     URI createdUri = URI.create(id);
     return Response.created(createdUri).build();
-
   }
 
   @PUT
@@ -114,22 +105,32 @@ public class TestProvider {
   }
 
   @GET
-  @Path("events/{username}")
+  @Path("events/{icp}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-  public Response getEventsForUser(@PathParam("username") String username,
-      @QueryParam("from") String from, @QueryParam("to") String to) {
-    log.info("user: " + username + " from: " + from + " to: " + to);
+  public Response getEventsForUser(@PathParam("icp") String icp, @QueryParam("from") String from,
+      @QueryParam("to") String to) {
+    log.info("icp: " + icp + " from: " + from + " to: " + to);
     if (eventsList == null || eventsList.isEmpty())
       return Response.status(Response.Status.NO_CONTENT).build();
 
-    // return as a list
     List<Event> events = new ArrayList<>();
-    //TODO podle data
+    long fromL, toL;
+    try {
+      fromL = TestUtil.dateToLong(from);
+      toL = TestUtil.dateToLong(to);
+    }
+    catch (ParseException e) {
+      return Response.status(Status.BAD_REQUEST).entity("Špatný formát datumu.").build();
+    }
+
     for (Map.Entry<String, Event> entry : eventsList.entrySet()) {
       String key = entry.getKey();
-      Event value = entry.getValue();
-      value.setServer_id(key);
-      events.add(value);
+      Event event = entry.getValue();
+      if (event.getIcp().equals(icp) && event.getDatum() >= fromL && event.getDatum() <= toL) {
+        event.setServer_id(key);
+        events.add(event);
+      }
+
     }
     return Response.ok(events).build();
   }
@@ -151,7 +152,7 @@ public class TestProvider {
   }
 
   @GET
-  @Path("employees/lastevent/{icp}")
+  @Path("employees/lastevents/{icp}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
   public Response getLastEventForEmployee(@PathParam("icp") String icp) {
     log.info("");
@@ -167,9 +168,9 @@ public class TestProvider {
   }
 
   @GET
-  @Path("records/{username}")
+  @Path("records/{kodpra}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-  public Response getRecordsForUser(@PathParam("username") String username,
+  public Response getRecordsForUser(@PathParam("kodpra") String kodpra,
       @QueryParam("from") String from, @QueryParam("to") String to) {
 
     List<Record> records = new ArrayList<>();
@@ -179,7 +180,7 @@ public class TestProvider {
       long toL = TestUtil.dateToLong(to);
 
       for (Record record : recordsList) {
-        if (record.getKodpra().equals(username) && record.getDatum() >= fromL
+        if (record.getKodpra().equals(kodpra) && record.getDatum() >= fromL
             && record.getDatum() <= toL) {
           records.add(record);
         }
@@ -189,7 +190,7 @@ public class TestProvider {
       return Response.status(Status.BAD_REQUEST).entity("Špatný formát datumu.").build();
     }
     finally {
-      log.info("user: " + username + " from: " + from + " to: " + to + " events.size(): "
+      log.info("user: " + kodpra + " from: " + from + " to: " + to + " events.size(): "
           + records.size());
     }
 
@@ -197,7 +198,26 @@ public class TestProvider {
       return Response.status(Response.Status.NO_CONTENT).build();
     return Response.ok(recordsList).build();
   }
-//TODO opravit
+  
+  @GET
+  @Path("records/time/{icp}")
+  @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+  public Response getRecordsTimeForUser(@PathParam("icp") String icp,
+      @QueryParam("from") String from, @QueryParam("to") String to) throws Exception {
+    log.info("icp: " + icp + " from: " + from + " to: " + to);
+    
+    return Response.ok(57600000L).build();
+  }
+  
+  @GET
+  @Path("events/time/{icp}")
+  @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+  public Response getEventssTimeForUser(@PathParam("icp") String icp,
+      @QueryParam("from") String from, @QueryParam("to") String to) throws Exception {
+    log.info("icp: " + icp + " from: " + from + " to: " + to);
+    
+    return Response.ok(39660000L).build();
+  }
   
   @GET
   @Path("employees/{icp}")
@@ -209,7 +229,6 @@ public class TestProvider {
       if (employee.getIcp().equals(icp))
         emp = employee;
     }
-    // TODO
     return Response.ok(emp).build();
   }
 
