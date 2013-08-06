@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 
 public class ConnectionManager {
   private static Logger log = Logger.getLogger("imisoid");
-  //private static Connection conn = null;
   
   public ConnectionManager() {
   }
@@ -21,18 +20,13 @@ public class ConnectionManager {
       Class.forName("oracle.jdbc.OracleDriver");
     }
     catch (ClassNotFoundException e) {
-      // TODO sysexit
       e.printStackTrace();
+      System.exit(1);
     }
 
   }
   
   public Connection getConnection() throws SQLException {
-    /*if (conn != null && conn.isClosed() != true) {
-      log.info("spojeni existuje");
-      return conn;
-    }*/
-    //log.info("Vytvarim spojeni");
     return DriverManager.getConnection(url, user, password);
-  }// TODO connection factory
+  }
 }

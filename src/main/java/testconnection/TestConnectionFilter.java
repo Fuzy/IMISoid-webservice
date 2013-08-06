@@ -1,6 +1,5 @@
 package testconnection;
 
-import java.util.Arrays;
 import java.util.logging.Logger;
 
 import javax.ws.rs.WebApplicationException;

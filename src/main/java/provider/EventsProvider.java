@@ -43,34 +43,6 @@ public class EventsProvider {
     return Response.ok().build();
   }
 
-  // TODO pouzit jako test spojeni
-  /*
-   * @GET
-   * 
-   * @Produces(MediaType.TEXT_PLAIN) public List<Event> getEventsToBrowser() {
-   * try { System.out.println("EventsProvider.getEventsToBrowser()"); return
-   * EventDao.getEvents("0000001", "29.7.2004", "30.7.2004"); } catch
-   * (SQLException e) { e.printStackTrace(); return null; } }
-   */
-
-  // TODO WS ok - 200, DB - ne ok 503 (jinak 404)
-  /*@GET
-  @Produces({ MediaType.TEXT_PLAIN + ";charset=utf-8", MediaType.TEXT_HTML + ";charset=utf-8" })
-  public Response test() {
-    log.info("");
-    String result = "";
-    try {
-      result = TestConnection.testConnection();
-    }
-    catch (Exception e) {
-      return Response.ok("Test spojení neúspěšný: " + e.getMessage()).status(500).build();// TODO
-    }
-    return Response.ok("Test spojení úspěšný: " + result).build();
-  }*/
-
-  // http://localhost:8080/Imisoid_WS/events/0000001?from=29.7.2004&to=30.7.2004
-  // ?from={from}&to={to}"
-  // TODO syncMarkerFrom
   @GET
   @Path("{username}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")

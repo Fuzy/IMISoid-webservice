@@ -21,10 +21,4 @@ public class ClientErrorExceptionMapper implements ExceptionMapper<ClientErrorEx
     return Response.status(400).entity(exception.getMessage())
         .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN + "; charset=UTF-8").build();
   }
-
-  /*
-   * @Override public Response toResponse(MyException ex) { log.warning("");
-   * return
-   * Response.status(500).entity(ex.getMessage()).type("text/plain").build(); }
-   */
 }
