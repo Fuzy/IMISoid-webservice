@@ -27,12 +27,10 @@ public class EventManager {
     connectionManager = new ConnectionManager();
   }
 
-  public static Connection getConnection() throws SQLException {
+  private static Connection getConnection() throws SQLException {
     if (conn != null && conn.isClosed() != true) {
-      log.info("spojeni existuje");
       return conn;
     }
-    log.info("---Zacinam spojeni---");
     return connectionManager.getConnection();
   }
 
@@ -41,7 +39,6 @@ public class EventManager {
     log.info("");
     String rowid = null;
     try {
-
       conn = getConnection();
       conn.setAutoCommit(false);
       applyPreInsertBussinesLogic(event);
@@ -51,7 +48,6 @@ public class EventManager {
     }
     catch (Exception e) {
       conn.rollback();
-      //e.printStackTrace();
       throw e;
     }
     finally {
@@ -69,7 +65,6 @@ public class EventManager {
       throw new ClientErrorException(
           "Nelze vložit záznam s datem neodpovídajícím pracovnímu poměru.");
     }
-    // nastavit typ 'O' nebo 'P' - asi klient
 
   }
 
@@ -92,8 +87,8 @@ public class EventManager {
     log.info("");
     boolean result;
     conn = getConnection();
-    log.info("getEvent");
     Event event = EventDao.getEvent(rowid, conn);
+    log.info("event " + event);
     if (event == null) {
       closeConnection(conn, null, null);
       return false; //neexistuje
@@ -110,7 +105,6 @@ public class EventManager {
     }
     applyPostDeleteBussinesLogic(event);
     closeConnection(conn, null, null);
-    //TODO bolean divny
     return result;
   }
 
@@ -154,13 +148,7 @@ public class EventManager {
     long yesterday = getPreviousDay(event.getDatum());
     DatabaseStoredProcedures.ccap_denni_zaznamy(longToDate(yesterday), event.getIcp(), conn);
     DatabaseStoredProcedures.ccap_denni_zaznamy(longToDate(event.getDatum()), event.getIcp(), conn);
-  }
-  
-  
-  
-  
-  
-  
+  }  
   
 
 }

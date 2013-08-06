@@ -30,6 +30,8 @@ import model.Employee;
 import model.Event;
 import model.Record;
 
+//TODO vic okomentovat tridy
+
 @Path("/test")
 public class TestProvider {
   private static Logger log = Logger.getLogger("imisoid_test");
@@ -164,7 +166,7 @@ public class TestProvider {
     if (emp == null)
       return Response.status(Response.Status.NO_CONTENT).build();
 
-    return Response.ok(emp).build();// TODO
+    return Response.ok(emp).build();
   }
 
   @GET

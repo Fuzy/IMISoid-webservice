@@ -12,30 +12,19 @@ import exceptions.ClientErrorException;
 
 public class BArchivLibrary {
 
-  /*private static ConnectionManager connectionManager;
-
-  static {
-    connectionManager = new ConnectionManager();
-  }
-
-  private static Connection getConnection() throws SQLException {
-    return connectionManager.getConnection();
-  }*/
-  
-  public static boolean lzeVlozit(String icp, long date, Connection conn) throws SQLException, ClientErrorException {
-    //Connection conn = null;
+  public static boolean lzeVlozit(String icp, long date, Connection conn) throws SQLException,
+      ClientErrorException {
     PreparedStatement stmt = null;
     ResultSet rset = null;
     long PomerOd = -1, PomerDo = -1, Vyneti = -1, Konec = -1;
-    long VDatum = date; // TODO trunc?
+    long VDatum = date; 
     try {
-      //conn = getConnection();
 
       stmt = conn.prepareStatement("select trunc(pomer_od) PomerOd,"
           + " trunc(nvl(pomer_do,to_date('4000','YYYY'))) PomerDo,"
           + "trunc(nvl(datum_vyneti,to_date('4000','YYYY'))) Vyneti,"
           + " trunc(nvl(datum_konec_vyneti,to_date('1000','YYYY'))) Konec"
-          + " from zamestnanec  where icp like ?");//'0000001'
+          + " from zamestnanec  where icp like ?");
       stmt.setString(1, icp);
       rset = stmt.executeQuery();
 

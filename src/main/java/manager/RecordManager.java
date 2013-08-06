@@ -2,6 +2,7 @@ package manager;
 
 import static database.DatabaseUtility.closeConnection;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -23,20 +24,28 @@ public class RecordManager {
     connectionManager = new ConnectionManager();
   }
 
-  public static Connection getConnection() throws SQLException {
+  private static Connection getConnection() throws SQLException {
     if (conn != null && conn.isClosed() != true) {
-      log.info("spojeni existuje");
       return conn;
     }
-    log.info("---Zacinam spojeni---");
     return connectionManager.getConnection();
   }
-  
-  public static List<Record> processGetRecords(String username, String dateFrom, String dateTo) throws Exception {
+
+  public static List<Record> processGetRecords(String username, String dateFrom, String dateTo)
+      throws Exception {
     log.info("");
     conn = getConnection();
     List<Record> records = RecordsDao.getRecords(username, dateFrom, dateTo, conn);
     closeConnection(conn, null, null);
     return records;
   }
+
+  public static BigDecimal getTime(String icp, String dateFrom, String dateTo) throws Exception {
+    log.info("");
+    conn = getConnection();
+    BigDecimal time = RecordsDao.getRecordsTime(icp, dateFrom, dateTo, conn);
+    closeConnection(conn, null, null);
+    return time;
+  }
+
 }

@@ -26,10 +26,8 @@ public class UserValidator {
 
   public static Connection getConnection() throws SQLException {
     if (conn != null && conn.isClosed() != true) {
-      log.info("spojeni existuje");
       return conn;
     }
-    log.info("---Zacinam spojeni---");
     return connectionManager.getConnection();
   }
 
@@ -80,7 +78,6 @@ public class UserValidator {
       return UserValidator.validateHeslo(credentials[0], credentials[1], conn);
     }
     catch (SQLException e) {
-      if (conn != null) conn.rollback();//TODO pokud spojeni neexistuje, null pointer exception
       throw e;
     }
     finally {

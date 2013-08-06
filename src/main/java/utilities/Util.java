@@ -38,7 +38,7 @@ public class Util {
 
   public static long dateToMsSinceEpoch(java.sql.Date date) {
     Calendar cal = Calendar.getInstance();
-    cal.setTimeZone(TimeZone.getTimeZone("UTC"));//TODO je to treba?
+    cal.setTimeZone(TimeZone.getTimeZone("UTC"));//TODO je to treba?, test
     cal.setTime(date);
     return cal.getTimeInMillis();
   }

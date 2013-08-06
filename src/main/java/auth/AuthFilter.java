@@ -23,7 +23,7 @@ public class AuthFilter implements ContainerRequestFilter {
 
     boolean isAuthorized = false;
     String authorization = request.getHeaderValue("Authorization");
-    log.info("path " + request.getPath() + " isTestMode " + isTestMode + " Łauthorization: "
+    log.info("path " + request.getPath() + " isTestMode " + isTestMode + " authorization: "
         + authorization);
     if (authorization != null) {
       if (isTestMode) {

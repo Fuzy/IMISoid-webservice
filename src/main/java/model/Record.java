@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Record {
-  private BigDecimal id;//TODO string
+  private BigDecimal id;
   private long datum;
   private String kodpra;
   private String zc;
@@ -134,7 +134,7 @@ public class Record {
     record.setDatum(dateToMsSinceEpoch(rsSet.getDate(COL_DATUM)));
     record.setMnozstvi_odved(timeFromDayDoubleToDayMs(rsSet.getLong(COL_MNOZSTVI_ODVED)));
     record.setKodpra(rsSet.getString(COL_KODPRA));
-    record.setZc(rsSet.getString(COL_ZC));//TODO ciselne typy jsou ok?
+    record.setZc(rsSet.getString(COL_ZC));
     record.setCpolzak(rsSet.getInt(COL_CPOLZAK));
     record.setCpozzak(rsSet.getInt(COL_CPOZZAK));
     record.setStav_v(rsSet.getString(COL_STAV_V));  

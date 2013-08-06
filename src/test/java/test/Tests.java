@@ -33,11 +33,9 @@ public class Tests {
       resp = httpClient.execute(delete);
     }
     catch (ClientProtocolException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     Assert.assertEquals(HttpStatus.SC_OK, resp.getStatusLine().getStatusCode());
@@ -54,11 +52,9 @@ public class Tests {
       resp = httpClient.execute(get);
     }
     catch (ClientProtocolException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     Assert.assertEquals(HttpStatus.SC_NO_CONTENT, resp.getStatusLine().getStatusCode());
@@ -74,11 +70,9 @@ public class Tests {
       resp = httpClient.execute(get);
     }
     catch (ClientProtocolException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     Assert.assertEquals(HttpStatus.SC_OK, resp.getStatusLine().getStatusCode());
@@ -101,11 +95,9 @@ public class Tests {
       resp = httpClient.execute(post);
     }
     catch (ClientProtocolException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
 
@@ -130,11 +122,9 @@ public class Tests {
       resp = httpClient.execute(post);
     }
     catch (ClientProtocolException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
 

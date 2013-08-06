@@ -16,12 +16,7 @@ import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleTypes;
 import static database.DatabaseUtility.*;
 
-/**
- * DAO pro přístup do databáze.
- * 
- * @author KDA
- * 
- */
+
 public class EventDao {
   private static Logger log = Logger.getLogger("imisoid");
   private static final String TABLE_EVENT = "karta";
@@ -39,7 +34,6 @@ public class EventDao {
 
   public static String createEvent(Event event, Connection conn) throws SQLException,
   ClientErrorException {
-    // Connection conn = null;
     OraclePreparedStatement stmt = null;
     ResultSet rset = null;
     int affectedRows = 0;
@@ -48,7 +42,6 @@ public class EventDao {
     Object[] values = event.eventAsArrayOfObjects();
 
     try {
-      // conn = getConnection();
       stmt = (OraclePreparedStatement) conn.prepareStatement(SQL_INSERT);
       setValues(stmt, values);
       stmt.registerReturnParameter(10, OracleTypes.VARCHAR, 100);
@@ -78,11 +71,9 @@ public class EventDao {
 
   public static boolean deleteEvent(String rowid, Connection conn) throws SQLException {
     log.info("");
-    // Connection conn = null;
     PreparedStatement stmt = null;
 
     try {
-      // conn = getConnection();
       stmt = conn.prepareStatement(SQL_DELETE);
       stmt.setString(1, rowid);
       int affectedRows = stmt.executeUpdate();
@@ -101,12 +92,11 @@ public class EventDao {
   }
 
   public static Event getEvent(String rowid, Connection conn) throws SQLException {
-    // Connection conn = null;
+    log.info("");
     PreparedStatement stmt = null;
     ResultSet rset = null;
 
     try {
-      // conn = getConnection();
       stmt = conn.prepareStatement(SQL_GET_EVENT);
       stmt.setString(1, rowid);
       rset = stmt.executeQuery();
@@ -128,14 +118,11 @@ public class EventDao {
   public static List<Event> getEvents(String icp, String dateFrom, String dateTo, Connection conn)
       throws SQLException {
     log.info("");
-    // Connection conn = null;
     PreparedStatement stmt = null;
     ResultSet rset = null;
     List<Event> events = new ArrayList<Event>();
 
     try {
-      // conn = getConnection();
-
       stmt = conn.prepareStatement(SQL_GET_EVENTS);
       stmt.setString(1, icp);
       stmt.setString(2, dateFrom);
@@ -156,20 +143,15 @@ public class EventDao {
     finally {
       closeConnection(null, stmt, rset);
     }
-    /*for (Event event : events) {
-      System.out.println(event);
-    }*/  
     return events;
   }
 
   public static boolean updateEvent(Event event, Connection conn) throws SQLException {
     log.info("");
-    // Connection conn = null;
     PreparedStatement stmt = null;
 
     Object[] values = event.eventAsArrayOfObjects();
     try {
-      // conn = getConnection();
       stmt = conn.prepareStatement(SQL_UPDATE);
       setValues(stmt, values);
       stmt.setString(10, event.getServer_id());

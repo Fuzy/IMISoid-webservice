@@ -14,14 +14,12 @@ import model.Employee;
 
 public class EmployeeDao {
   private static Logger log = Logger.getLogger("imisoid");
-  private static final String DAYS_LIMIT = "100";// TODO mensi interval,
-                                                 // konfiguracni udaj
+  private static final String DAYS_LIMIT = "100";// TODO mensi interval do ostreho provozu
   private static final String SQL_GET_EMPLOYEES = ""
       + "select '1' as \"SUB\",z.icp,z.jmeno,o.kodpra from zamestnanec z, osoba o "
       + "where z.icp = o.oscislo and z.pomer_do >= '31.12.2008' and z.icp_ved like ? " + "union "
       + "select '0' as \"SUB\",z.icp,z.jmeno,o.kodpra from zamestnanec z, osoba o "
       + "where z.icp = o.oscislo and z.pomer_do >= '31.12.2008' and z.icp_ved not like ?";
-  // TODO to vraci i pro neextistuici icp
 
   private static final String SQL_GET_EMPLOYEES_LAST_EVENT = "select k.icp, k.datum, k.kod_po, k.druh, k.cas "
       + "from (select ki.icp, ki.datum, ki.kod_po, ki.druh, ki.cas, "
@@ -40,7 +38,6 @@ public class EmployeeDao {
     PreparedStatement stmt = null;
     ResultSet rset = null;
     List<Employee> employees = new ArrayList<Employee>();
-    // TODO kontrola zda zamestnanec existuje
     try {
       stmt = conn.prepareStatement(SQL_GET_EMPLOYEES);
       stmt.setString(1, icp);
@@ -54,7 +51,6 @@ public class EmployeeDao {
     }
     catch (SQLException e) {
       log.warning(e.getMessage());
-      e.printStackTrace();
       throw e;
     }
     finally {
@@ -75,12 +71,11 @@ public class EmployeeDao {
       while (rset.next()) {
         Employee employee = Employee.resultSetToEmployee(rset);
         employees.add(employee);
-        System.out.println(employee);
+        log.info(employee.toString());
       }
     }
     catch (SQLException e) {
       log.warning(e.getMessage());
-      e.printStackTrace();
       throw e;
     }
     finally {
@@ -103,12 +98,11 @@ public class EmployeeDao {
       rset = stmt.executeQuery();
       while (rset.next()) {
         employee = Employee.resultSetToEmployee(rset);
-        System.out.println(employee);
+        log.info(employee.toString());
       }
     }
     catch (SQLException e) {
       log.warning(e.getMessage());
-      e.printStackTrace();// TODO
       throw e;
     }
     finally {
@@ -136,7 +130,6 @@ public class EmployeeDao {
     }
     catch (SQLException e) {
       log.warning(e.getMessage());
-      e.printStackTrace();// TODO
       throw e;
     }
     finally {
