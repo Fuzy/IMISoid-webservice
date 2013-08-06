@@ -31,15 +31,18 @@ public class TestConnectionFilter implements ContainerRequestFilter {
     Response response = null;
     if (isTestMode) {
       response = Response.ok("Test spojení úspěšný").build();
+      log.info("isTestMode: " + isTestMode + " ok");
     }
     else {
       String result = "";
       try {
         result = TestConnection.testConnection();
         response = Response.ok("Test spojení úspěšný: " + result).build();
+        log.info("isTestMode: " + isTestMode + " ok");
       }
       catch (Exception e) {
         response = Response.ok("Test spojení neúspěšný: " + e.getMessage()).status(500).build();
+        log.info("isTestMode: " + isTestMode + " N/A");
       }     
     }
 

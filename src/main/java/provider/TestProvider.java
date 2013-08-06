@@ -32,10 +32,15 @@ import model.Record;
 
 //TODO vic okomentovat tridy
 
+/**
+ * Testing provider. Works without backend database, only with data in memory.
+ * 
+ * @author Martin Kadlec
+ */
 @Path("/test")
 public class TestProvider {
   private static Logger log = Logger.getLogger("imisoid_test");
-  private static long HOURS_22 = 75600000;
+  private static long HOURS_22 = 79200000;
 
   private static List<Record> recordsList = new ArrayList<>();
   private static List<Employee> employeesList = new ArrayList<>();
@@ -43,11 +48,12 @@ public class TestProvider {
   private static int serverId = 1;
 
   static {
+    // Events
     Event event = new Event("0", "123", 1371337200000L, "00", "P", 28000L, "ABC", "O",
         1371337200000L, "poznamka ");
     eventsList.put(String.valueOf(serverId++), event);
-    event = new Event("0", "123", 1371337200000L, "00", "O", 30000L, "ABC", "O",
-        1371337200000L, "poznamka ");
+    event = new Event("0", "123", 1371337200000L, "00", "O", 30000L, "ABC", "O", 1371337200000L,
+        "poznamka ");
     eventsList.put(String.valueOf(serverId++), event);
 
     // Records
@@ -61,6 +67,7 @@ public class TestProvider {
         28800000L, "hlaseni", "ukol", "moc prace");
     recordsList.add(record);
 
+    // Employees
     Employee employee = new Employee("123", "ABC", "Pepa Zdepa", false, 1360000000000L, 28800000L,
         "00", "P");
     employeesList.add(employee);
@@ -79,14 +86,14 @@ public class TestProvider {
     Event event = eventsList.remove(rowid);
     if (event != null)
       id = rowid;
-    log.info(" id: " + id);
+    log.info("rowid: " + rowid + " id: " + id);
     return Response.ok().build();
   }
 
   @POST
   @Path("events")
   @Consumes(MediaType.APPLICATION_JSON)
-  public Response createOrUpdateEvent(Event event) throws Exception {
+  public Response createEvent(Event event) throws Exception {
     log.info("Event: " + event);
     String id = String.valueOf(serverId++);
     if (event.getCas() > HOURS_22) {
@@ -102,6 +109,9 @@ public class TestProvider {
   @Consumes(MediaType.APPLICATION_JSON)
   public Response updateEvent(Event event) throws Exception {
     log.info("Event: " + event);
+    if (event.getCas() > HOURS_22) {
+      throw new ClientErrorException("Zadaný čas přesahuje 22:00");
+    }
     eventsList.put(event.getServer_id(), event);
     return Response.status(Response.Status.ACCEPTED).build();
   }
@@ -200,27 +210,25 @@ public class TestProvider {
       return Response.status(Response.Status.NO_CONTENT).build();
     return Response.ok(recordsList).build();
   }
-  
+
   @GET
   @Path("records/time/{icp}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
   public Response getRecordsTimeForUser(@PathParam("icp") String icp,
       @QueryParam("from") String from, @QueryParam("to") String to) throws Exception {
     log.info("icp: " + icp + " from: " + from + " to: " + to);
-    
-    return Response.ok(57600000L).build();
+    return Response.ok(0L).build();
   }
-  
+
   @GET
   @Path("events/time/{icp}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
   public Response getEventssTimeForUser(@PathParam("icp") String icp,
       @QueryParam("from") String from, @QueryParam("to") String to) throws Exception {
     log.info("icp: " + icp + " from: " + from + " to: " + to);
-    
-    return Response.ok(39660000L).build();
+    return Response.ok(0L).build();
   }
-  
+
   @GET
   @Path("employees/{icp}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")

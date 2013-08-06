@@ -68,5 +68,7 @@ public class EventsProvider {
     log.info("updated: " + updated);
     return Response.status(Response.Status.ACCEPTED).build();
   }
+  
+  //TODO getEventsTimeForUser
 
 }
