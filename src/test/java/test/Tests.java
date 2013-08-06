@@ -112,7 +112,7 @@ public class Tests {
     Assert.assertEquals(HttpStatus.SC_NO_CONTENT, resp.getStatusLine().getStatusCode());
   }
 
-  //@Ignore
+  @Ignore
   @Test
   public void httpPostAsJson() {
     HttpResponse resp = null;
@@ -139,11 +139,5 @@ public class Tests {
     }
 
     Assert.assertEquals(HttpStatus.SC_NO_CONTENT, resp.getStatusLine().getStatusCode());
-  }
-
-  @Ignore
-  @Test
-  public void httpPut() {
-
   }
 }
