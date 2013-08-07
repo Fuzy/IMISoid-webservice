@@ -14,12 +14,14 @@ import model.Employee;
 
 public class EmployeeDao {
   private static Logger log = Logger.getLogger("imisoid");
-  private static final String DAYS_LIMIT = "100";// TODO mensi interval do ostreho provozu
+  private static final String DAYS_LIMIT = "100";// TODO mensi interval do
+                                                 // ostreho provozu
   private static final String SQL_GET_EMPLOYEES = ""
       + "select '1' as \"SUB\",z.icp,z.jmeno,o.kodpra from zamestnanec z, osoba o "
-      + "where z.icp = o.oscislo and z.pomer_do >= '31.12.2008' and z.icp_ved like ? " + "union "
+      + "where z.icp = o.oscislo and (z.pomer_do >= SYSDATE or z.pomer_do is null) and z.icp_ved like ? " 
+      + "union "
       + "select '0' as \"SUB\",z.icp,z.jmeno,o.kodpra from zamestnanec z, osoba o "
-      + "where z.icp = o.oscislo and z.pomer_do >= '31.12.2008' and z.icp_ved not like ?";
+      + "where z.icp = o.oscislo and (z.pomer_do >= SYSDATE or z.pomer_do is null) and z.icp_ved not like ?";
 
   private static final String SQL_GET_EMPLOYEES_LAST_EVENT = "select k.icp, k.datum, k.kod_po, k.druh, k.cas "
       + "from (select ki.icp, ki.datum, ki.kod_po, ki.druh, ki.cas, "
@@ -30,7 +32,9 @@ public class EmployeeDao {
       + "(select k.icp, k.datum, k.kod_po, k.druh, k.cas from karta k "
       + "where k.datum > (sysdate - " + DAYS_LIMIT + ") and k.icp like ? "
       + "order by k.datum desc, k.cas desc) where rownum <=1";
-  private static final String SQL_GET_EMPLOYEE = "select z.icp, z.jmeno, o.kodpra from zamestnanec z, osoba o where z.icp like ? and z.icp = o.oscislo";
+  
+  private static final String SQL_GET_EMPLOYEE = "select z.icp, z.jmeno, o.kodpra from zamestnanec z, osoba o " +
+  		"where z.icp like ? and z.icp = o.oscislo";
 
   public static List<Employee> getEmployees(String icp, Connection conn) throws SQLException {
     log.info("");
@@ -46,7 +50,7 @@ public class EmployeeDao {
       while (rset.next()) {
         Employee employee = Employee.resultSetToEmployee(rset);
         employees.add(employee);
-        System.out.println(employee);
+        log.info(employee.toString());
       }
     }
     catch (SQLException e) {
@@ -125,7 +129,7 @@ public class EmployeeDao {
       rset = stmt.executeQuery();
       while (rset.next()) {
         employee = Employee.resultSetToEmployee(rset);
-        System.out.println(employee);
+        log.info(employee.toString());
       }
     }
     catch (SQLException e) {

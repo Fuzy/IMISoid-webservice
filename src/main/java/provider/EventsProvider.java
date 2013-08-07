@@ -1,5 +1,6 @@
 package provider;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 import java.util.logging.Logger;
@@ -68,7 +69,15 @@ public class EventsProvider {
     log.info("updated: " + updated);
     return Response.status(Response.Status.ACCEPTED).build();
   }
-  
-  //TODO getEventsTimeForUser
 
+  @GET
+  @Path("time/{icp}")
+  @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+  public Response getEventsTimeForUser(@PathParam("icp") String icp,
+      @QueryParam("from") String from, @QueryParam("to") String to) throws Exception {
+    log.info("icp: " + icp + " from: " + from + " to: " + to);
+    BigDecimal time = EventManager.getTime(icp, from, to);
+    return Response.ok(time).build();
+  }
+  
 }

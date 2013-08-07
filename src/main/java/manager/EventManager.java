@@ -4,6 +4,7 @@ import static database.DatabaseUtility.closeConnection;
 import static utilities.Util.getPreviousDay;
 import static utilities.Util.longToDate;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -141,6 +142,14 @@ public class EventManager {
     }
 
     return true;
+  }
+  
+  public static BigDecimal getTime(String icp, String dateFrom, String dateTo) throws Exception {
+    log.info("");
+    conn = getConnection();
+    BigDecimal time = EventDao.getEventsTime(icp, dateFrom, dateTo, conn);
+    closeConnection(conn, null, null);
+    return time;
   }
   
   private static void applyPostUpdateBussinesLogic(Event event) throws SQLException {

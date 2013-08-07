@@ -18,6 +18,7 @@ public class ConnectionManager {
   static {
     try {
       Class.forName("oracle.jdbc.OracleDriver");
+      log.info("oracle.jdbc.OracleDriver loaded");
     }
     catch (ClassNotFoundException e) {
       e.printStackTrace();

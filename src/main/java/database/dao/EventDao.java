@@ -1,5 +1,7 @@
 package database.dao;
 
+import java.math.BigDecimal;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,6 +33,8 @@ public class EventDao {
   private static final String SQL_UPDATE = "update "
       + TABLE_EVENT
       + " set icp=?, datum=?, kod_po=?, druh=?, cas=?, ic_obs=?, typ=?, datum_zmeny=?, poznamka=?  where rowid=?";
+  private static final String SQL_GET_TIME_EVENTS = 
+      "{? = call CCAP_ODPICH_DOBA_OBDOBI(?,to_date(?, 'DD.MM.YYYY'),to_date(?, 'DD.MM.YYYY'))}";
 
   public static String createEvent(Event event, Connection conn) throws SQLException,
   ClientErrorException {
@@ -169,6 +173,32 @@ public class EventDao {
     }
 
     return false;
+  }
+  
+  public static BigDecimal getEventsTime(String icp, String dateFrom, String dateTo,
+      Connection conn) throws SQLException {
+    log.info("");
+    BigDecimal time;
+    CallableStatement stmt = null;
+
+    try {
+      stmt = conn.prepareCall(SQL_GET_TIME_EVENTS);
+      stmt.setQueryTimeout(5);
+      stmt.setString(2, icp);
+      stmt.setString(3, dateFrom);
+      stmt.setString(4, dateTo);
+      stmt.registerOutParameter(1, OracleTypes.NUMBER);
+      stmt.executeUpdate();
+      time = stmt.getBigDecimal(1);
+    }
+    catch (SQLException e) {
+      log.warning(e.getMessage());
+      throw e;
+    }
+    finally {
+      closeConnection(null, stmt, null);
+    }
+    return time;
   }
 
   private static void setValues(PreparedStatement preparedStatement, Object... values)
