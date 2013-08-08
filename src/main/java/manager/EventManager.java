@@ -35,8 +35,7 @@ public class EventManager {
     return connectionManager.getConnection();
   }
 
-  public static String processCreateEvent(Event event) throws Exception
-       {
+  public static String processCreateEvent(Event event) throws Exception {
     log.info("");
     String rowid = null;
     try {
@@ -59,7 +58,7 @@ public class EventManager {
   }
 
   private static void applyPreInsertBussinesLogic(Event event) throws SQLException,
-  ClientErrorException {
+      ClientErrorException {
     log.info("");
     boolean lzeVlozit = BArchivLibrary.lzeVlozit(event.getIcp(), event.getDatum(), conn);
     if (lzeVlozit == false) {
@@ -75,15 +74,16 @@ public class EventManager {
     DatabaseStoredProcedures.ccap_denni_zaznamy(longToDate(yesterday), event.getIcp(), conn);
     DatabaseStoredProcedures.ccap_denni_zaznamy(longToDate(event.getDatum()), event.getIcp(), conn);
   }
-  
-  public static List<Event> processGetEvents(String icp, String dateFrom, String dateTo) throws Exception {
+
+  public static List<Event> processGetEvents(String icp, String dateFrom, String dateTo)
+      throws Exception {
     log.info("");
     conn = getConnection();
     List<Event> events = EventDao.getEvents(icp, dateFrom, dateTo, conn);
     closeConnection(conn, null, null);
     return events;
   }
-  
+
   public static boolean processDeleteEvent(String rowid) throws Exception {
     log.info("");
     boolean result;
@@ -92,7 +92,7 @@ public class EventManager {
     log.info("event " + event);
     if (event == null) {
       closeConnection(conn, null, null);
-      return false; //neexistuje
+      return false; // neexistuje
     }
     if (event.getTyp().equals("O")) {
       event.setTyp("S");
@@ -115,20 +115,19 @@ public class EventManager {
     DatabaseStoredProcedures.ccap_denni_zaznamy(longToDate(yesterday), event.getIcp(), conn);
     DatabaseStoredProcedures.ccap_denni_zaznamy(longToDate(event.getDatum()), event.getIcp(), conn);
   }
-  
+
   public static boolean processUpdateEvent(Event event) throws Exception {
     log.info("");
     try {
       conn = getConnection();
       conn.setAutoCommit(false);
       if (event.getTyp().equals("O")) {
-        Event copy = new Event(event);
-        copy.setTyp("S");
-        EventDao.createEvent(copy, conn);
+        Event orig = EventDao.getEvent(event.getServer_id(), conn);
+        orig.setTyp("S");
+        EventDao.createEvent(orig, conn);
+        event.setTyp("N");
       }
-      else {
-        EventDao.updateEvent(event, conn);
-      }
+      EventDao.updateEvent(event, conn);
       applyPostUpdateBussinesLogic(event);
       conn.commit();
     }
@@ -143,7 +142,7 @@ public class EventManager {
 
     return true;
   }
-  
+
   public static BigDecimal getTime(String icp, String dateFrom, String dateTo) throws Exception {
     log.info("");
     conn = getConnection();
@@ -151,13 +150,12 @@ public class EventManager {
     closeConnection(conn, null, null);
     return time;
   }
-  
+
   private static void applyPostUpdateBussinesLogic(Event event) throws SQLException {
     log.info("");
     long yesterday = getPreviousDay(event.getDatum());
     DatabaseStoredProcedures.ccap_denni_zaznamy(longToDate(yesterday), event.getIcp(), conn);
     DatabaseStoredProcedures.ccap_denni_zaznamy(longToDate(event.getDatum()), event.getIcp(), conn);
-  }  
-  
+  }
 
 }

@@ -68,7 +68,6 @@ public class EventDao {
       closeConnection(null, stmt, rset);
     }
 
-    System.out.println("affectedRows: " + affectedRows + " rowid: " + rowid);
 
     return rowid;
   }
@@ -205,6 +204,10 @@ public class EventDao {
       throws SQLException {
     for (int i = 0; i < values.length; i++) {
       preparedStatement.setObject(i + 1, values[i]);
+      /*Object obj = values[i];      
+      if (obj != null) {
+        System.out.println("type " + obj.getClass().getName());
+      }*/
     }
   }
 }

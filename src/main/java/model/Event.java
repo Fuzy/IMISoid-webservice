@@ -2,6 +2,7 @@ package model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import static utilities.Util.*;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -66,7 +67,6 @@ public class Event {
     this.icp = icp;
   }
 
-  // @XmlJavaTypeAdapter(JaxbDateSerializer.class)
   public long getDatum() {
     return datum;
   }
@@ -115,7 +115,6 @@ public class Event {
     this.typ = typ;
   }
 
-  // @XmlJavaTypeAdapter(JaxbDateSerializer.class)
   public long getDatum_zmeny() {
     return datum_zmeny;
   }
@@ -147,7 +146,7 @@ public class Event {
     event.setDatum(dateToMsSinceEpoch(rsSet.getDate(COL_DATUM)));
     event.setKod_po(rsSet.getString(COL_KOD_PO));
     event.setDruh(rsSet.getString(COL_DRUH));
-    event.setCas(timeFromDayDoubleToDayMs(rsSet.getLong(COL_CAS)));
+    event.setCas(timeFromDayDoubleToDayMs(rsSet.getDouble(COL_CAS)));
     event.setIc_obs(rsSet.getString(COL_IC_OBS));
     event.setTyp(rsSet.getString(COL_TYP));
     event.setDatum_zmeny(dateToMsSinceEpoch(rsSet.getDate(COL_DATUM_ZMENY)));

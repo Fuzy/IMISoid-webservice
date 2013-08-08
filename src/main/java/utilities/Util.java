@@ -2,10 +2,10 @@ package utilities;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.TimeZone;
 
 public class Util {
-  public static final SimpleDateFormat dateAndTimeFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+  public static final SimpleDateFormat dateAndTimeFormat = new SimpleDateFormat(
+      "dd.MM.yyyy HH:mm:ss");
   public static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
   public static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
@@ -23,7 +23,6 @@ public class Util {
     double minute = Math.round(dec * 60.0);
 
     long todayMs = msInHourL * (long) hour + msInMinL * (long) minute;
-
     return todayMs;
   }
 
@@ -38,12 +37,11 @@ public class Util {
 
   public static long dateToMsSinceEpoch(java.sql.Date date) {
     Calendar cal = Calendar.getInstance();
-    cal.setTimeZone(TimeZone.getTimeZone("UTC"));//TODO je to treba?, test
     cal.setTime(date);
     return cal.getTimeInMillis();
   }
 
-  public static java.sql.Date longToDate(long date) {//TODO test
+  public static java.sql.Date longToDate(long date) {
     return new java.sql.Date(date);
   }
 
@@ -52,19 +50,19 @@ public class Util {
     cal.setTimeInMillis(time);
     return dateAndTimeFormat.format(cal.getTime());
   }
-  
+
   public static String formatDate(long time) {
     Calendar cal = Calendar.getInstance();
     cal.setTimeInMillis(time);
     return dateFormat.format(cal.getTime());
   }
-  
+
   public static String formatTime(long time) {
     Calendar cal = Calendar.getInstance();
     cal.setTimeInMillis(time);
     return timeFormat.format(cal.getTime());
   }
-  
+
   public static long getPreviousDay(long time) {
     Calendar cal = Calendar.getInstance();
     cal.setTimeInMillis(time);
