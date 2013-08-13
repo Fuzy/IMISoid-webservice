@@ -7,6 +7,11 @@ import static utilities.Util.*;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Represents one attendance event (arrive or leave).
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ *
+ */
 @XmlRootElement
 public class Event {
   private String rowid;

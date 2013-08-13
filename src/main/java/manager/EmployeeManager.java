@@ -12,6 +12,11 @@ import model.Employee;
 import database.connection.ConnectionManager;
 import database.dao.EmployeeDao;
 
+/**
+ * Manage request to datasource of employees.
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ *
+ */
 public class EmployeeManager {
   private static Logger log = Logger.getLogger("imisoid");
 

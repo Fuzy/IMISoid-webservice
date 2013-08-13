@@ -18,6 +18,11 @@ import database.lib.BArchivLibrary;
 import database.lib.DatabaseStoredProcedures;
 import exceptions.ClientErrorException;
 
+/**
+ * Manage request to datasource of events.
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ *
+ */
 public class EventManager {
   private static Logger log = Logger.getLogger("imisoid");
 

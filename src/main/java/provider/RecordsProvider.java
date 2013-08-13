@@ -15,10 +15,15 @@ import javax.ws.rs.core.Response;
 import manager.RecordManager;
 import model.Record;
 
+/**
+ * Provider for work records.
+ * 
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ *
+ */
 @Path("/records")
 public class RecordsProvider {
   private static Logger log = Logger.getLogger("imisoid");
-  //TODO manazer jako ne-static
 
   @GET
   @Path("{kodpra}")

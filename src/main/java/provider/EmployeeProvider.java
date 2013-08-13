@@ -13,6 +13,11 @@ import javax.ws.rs.core.Response;
 import manager.EmployeeManager;
 import model.Employee;
 
+/**
+ * Provider for employees of company.
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ *
+ */
 @Path("/employees")
 public class EmployeeProvider {
   private static Logger log = Logger.getLogger("imisoid");

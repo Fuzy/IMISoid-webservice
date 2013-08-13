@@ -8,6 +8,11 @@ import java.sql.Statement;
 import static database.DatabaseUtility.closeConnection;
 import static database.connection.Credentials.*;
 
+/**
+ * Stores method for testing connection to database.
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ *
+ */
 public class TestConnection {
   
   public static String testConnection() throws Exception {

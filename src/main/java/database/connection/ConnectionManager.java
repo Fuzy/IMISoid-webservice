@@ -9,6 +9,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+/**
+ * Creates new connections to database.
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ *
+ */
 public class ConnectionManager {
   private static Logger log = Logger.getLogger("imisoid");
   

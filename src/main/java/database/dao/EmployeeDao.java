@@ -12,6 +12,11 @@ import java.util.logging.Logger;
 
 import model.Employee;
 
+/**
+ * Data access object for employees.
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ *
+ */
 public class EmployeeDao {
   private static Logger log = Logger.getLogger("imisoid");
   private static final String DAYS_LIMIT = "100";// TODO mensi interval do

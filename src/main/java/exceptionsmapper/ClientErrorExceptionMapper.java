@@ -10,6 +10,11 @@ import javax.ws.rs.ext.Provider;
 
 import exceptions.ClientErrorException;
 
+/**
+ * Maps exception to HTTP client error - 400 response.
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ *
+ */
 @Provider
 public class ClientErrorExceptionMapper implements ExceptionMapper<ClientErrorException> {
   private static Logger log = Logger.getLogger("imisoid");

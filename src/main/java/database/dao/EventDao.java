@@ -18,7 +18,11 @@ import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleTypes;
 import static database.DatabaseUtility.*;
 
-
+/**
+ * Data access object for attendance events.
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ *
+ */
 public class EventDao {
   private static Logger log = Logger.getLogger("imisoid");
   private static final String TABLE_EVENT = "karta";

@@ -10,6 +10,12 @@ import com.sun.jersey.spi.container.ContainerRequestFilter;
 
 import database.connection.TestConnection;
 
+/**
+ * It filters all incoming requests and process all which test connection to server.
+ * Requests which are not intended for connection test are delivered further.
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ *
+ */
 public class TestConnectionFilter implements ContainerRequestFilter {
   private static Logger log = Logger.getLogger("imisoid");
   private static final String TEST_CONN_PATH = "testconnection";

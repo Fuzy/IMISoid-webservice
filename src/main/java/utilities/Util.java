@@ -3,6 +3,11 @@ package utilities;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+/**
+ * Utility methods for time datatypes conversion, time string formatting.
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ *
+ */
 public class Util {
   public static final SimpleDateFormat dateAndTimeFormat = new SimpleDateFormat(
       "dd.MM.yyyy HH:mm:ss");

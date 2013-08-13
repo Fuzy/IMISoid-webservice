@@ -12,6 +12,11 @@ import database.connection.ConnectionManager;
 
 import oracle.jdbc.OracleTypes;
 
+/**
+ * Validate(check credentials) both test user and real user. 
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ *
+ */
 public class UserValidator {
   private static Logger log = Logger.getLogger("imisoid");
   private static final String PASS = "TST";

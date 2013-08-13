@@ -9,6 +9,11 @@ import javax.ws.rs.core.Response;
 import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;
 
+/**
+ * Authorization filter. It filters incoming requests and blocks all unauthorized.
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ *
+ */
 public class AuthFilter implements ContainerRequestFilter {
   private static Logger log = Logger.getLogger("imisoid");
   private static final String TEST_PATH = "test";

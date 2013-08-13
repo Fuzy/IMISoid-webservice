@@ -13,6 +13,11 @@ import model.Record;
 import database.connection.ConnectionManager;
 import database.dao.RecordsDao;
 
+/**
+ * Manage request to datasource of work records.
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ *
+ */
 public class RecordManager {
 
   private static Logger log = Logger.getLogger("imisoid");

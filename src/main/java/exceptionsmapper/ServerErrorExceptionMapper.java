@@ -10,6 +10,12 @@ import javax.ws.rs.ext.Provider;
 
 import exceptions.ServerErrorException;
 
+/**
+ * Maps exception to HTTP server error - 500 response.
+ * 
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ * 
+ */
 @Provider
 public class ServerErrorExceptionMapper implements ExceptionMapper<ServerErrorException> {
   private static Logger log = Logger.getLogger("imisoid");

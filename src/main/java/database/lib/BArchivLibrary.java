@@ -10,6 +10,11 @@ import java.sql.SQLException;
 import static database.DatabaseUtility.*;
 import exceptions.ClientErrorException;
 
+/**
+ * Stores method of 'BArchiv' library of IMIS system.
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ *
+ */
 public class BArchivLibrary {
 
   public static boolean lzeVlozit(String icp, long date, Connection conn) throws SQLException,
@@ -38,8 +43,8 @@ public class BArchivLibrary {
       else {
         throw new ClientErrorException("BLB-03401: Nenalezeno požadované ICP zaměstnance.");
       }
-      System.out.println("VDatum: " + VDatum + " PomerOd: " + PomerOd + " PomerDo: " + PomerDo
-          + " Vyneti: " + Vyneti + " Konec: " + Konec);
+      /*System.out.println("VDatum: " + VDatum + " PomerOd: " + PomerOd + " PomerDo: " + PomerDo
+          + " Vyneti: " + Vyneti + " Konec: " + Konec);*/
 
       if (VDatum >= PomerOd
           && VDatum <= PomerDo
@@ -51,7 +56,6 @@ public class BArchivLibrary {
       }
     }
     catch (SQLException e) {
-      e.printStackTrace();
       throw e;
     }
     finally {

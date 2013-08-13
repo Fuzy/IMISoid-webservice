@@ -17,9 +17,17 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import exceptions.ServerErrorException;
+
 import manager.EventManager;
 import model.Event;
 
+/**
+ * Provider for attendance events (entry of employee's arrive or leave).
+ * 
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ * 
+ */
 @Path("/events")
 public class EventsProvider {
   private static Logger log = Logger.getLogger("imisoid");
@@ -55,7 +63,9 @@ public class EventsProvider {
     log.info("event: " + event);
     String rowid = null;
     rowid = EventManager.processCreateEvent(event);
-    URI createdUri = URI.create(rowid);// TODO null pointer ex
+    if (rowid == null)
+      throw new ServerErrorException("Vytvoření záznamu se nezdařilo");
+    URI createdUri = URI.create(rowid);
     log.info("created: " + rowid);
     return Response.created(createdUri).build();
   }
@@ -79,5 +89,5 @@ public class EventsProvider {
     BigDecimal time = EventManager.getTime(icp, from, to);
     return Response.ok(time).build();
   }
-  
+
 }

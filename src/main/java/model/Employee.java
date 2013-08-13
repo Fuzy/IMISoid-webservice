@@ -8,6 +8,11 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import static database.DatabaseUtility.hasColumn;
 import static utilities.Util.*;
 
+/**
+ * Represents one employee.
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ *
+ */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Employee {
   private String icp;

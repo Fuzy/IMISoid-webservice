@@ -6,14 +6,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Logger;
 
 import exceptions.ClientErrorException;
 
 import model.Event;
 
+/**
+ * Validator of attendance event.
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ *
+ */
 public class EventValidator {
-  private static Logger log = Logger.getLogger("imisoid");
+  //private static Logger log = Logger.getLogger("imisoid");
 
   public static void validateEvent(Event event, Connection conn) throws SQLException,
       ClientErrorException {

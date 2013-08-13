@@ -30,11 +30,9 @@ import model.Employee;
 import model.Event;
 import model.Record;
 
-//TODO vic okomentovat tridy
 
 /**
- * Testing provider. Works without backend database, only with data in memory.
- * 
+ * Testing provider. Works without backend database, only with data in memory. * 
  * @author Martin Kadlec
  */
 @Path("/test")
@@ -49,10 +47,16 @@ public class TestProvider {
 
   static {
     // Events
-    Event event = new Event("0", "123", 1371337200000L, "00", "P", 28000L, "ABC", "O",
+    Event event = new Event("0", "123", 1371337200000L, "00", "P", 28000000L, "ABC", "O",
         1371337200000L, "poznamka ");
     eventsList.put(String.valueOf(serverId++), event);
-    event = new Event("0", "123", 1371337200000L, "00", "O", 30000L, "ABC", "O", 1371337200000L,
+    event = new Event("0", "123", 1371337200000L, "00", "O", 64000000L, "ABC", "O", 1371337200000L,
+        "poznamka ");
+    eventsList.put(String.valueOf(serverId++), event);
+    event = new Event("0", "TST", 1371337200000L, "00", "P", 28000000L, "ABC", "O", 1371337200000L,
+        "poznamka ");
+    eventsList.put(String.valueOf(serverId++), event);
+    event = new Event("0", "TST", 1371337200000L, "00", "O", 31600000L, "ABC", "O", 1371337200000L,
         "poznamka ");
     eventsList.put(String.valueOf(serverId++), event);
 
@@ -63,7 +67,7 @@ public class TestProvider {
     record = new Record(new BigDecimal("2"), 1371337200000L, "TST", "A-VV-2013", "V", 13, 15,
         28800000L, "hlaseni", "ukol", "moc prace");
     recordsList.add(record);
-    record = new Record(new BigDecimal("3"), 1371337200000L, "JSA", "A-VV-2013", "V", 13, 15,
+    record = new Record(new BigDecimal("3"), 1371337200000L, "ABC", "A-VV-2013", "V", 13, 15,
         28800000L, "hlaseni", "ukol", "moc prace");
     recordsList.add(record);
 
@@ -79,6 +83,10 @@ public class TestProvider {
     employeesList.add(employee);
   }
 
+  /**
+   * @param rowid
+   * @return
+   */
   @DELETE
   @Path("events/{rowid}")
   public Response deleteEvent(@PathParam("rowid") String rowid) {
@@ -208,7 +216,7 @@ public class TestProvider {
 
     if (records.isEmpty())
       return Response.status(Response.Status.NO_CONTENT).build();
-    return Response.ok(recordsList).build();
+    return Response.ok(records).build();
   }
 
   @GET

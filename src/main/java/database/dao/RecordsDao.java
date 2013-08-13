@@ -16,6 +16,11 @@ import oracle.jdbc.OracleTypes;
 
 import model.Record;
 
+/**
+ * Data access object for work records.
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ *
+ */
 public class RecordsDao {
   private static Logger log = Logger.getLogger("imisoid");
   private static final String SQL_GET_RECORDS = "select t.id, t.datum, t.kodpra, t.stav_v, t.zc, "
@@ -23,7 +28,7 @@ public class RecordsDao {
       + "from den_vykaz t where kodpra like ? and datum >=  ? and datum <=  ?";
   private static final String SQL_GET_TIME_RECORDS = 
       "{? = call CCAP_GET_ODPRAC(?,to_date(?, 'DD.MM.YYYY'),to_date(?, 'DD.MM.YYYY'))}";
-//TODO prevest na date
+  
   public static List<Record> getRecords(String username, String dateFrom, String dateTo,
       Connection conn) throws SQLException {
     log.info("");

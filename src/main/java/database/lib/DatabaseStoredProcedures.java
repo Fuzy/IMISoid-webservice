@@ -6,17 +6,20 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * Stores method for processing attendance events. 
+ * @author Martin Kadlec, A11N0109P(ZCU)
+ *
+ */
 public class DatabaseStoredProcedures {
 
-
-  public static void ccap_denni_zaznamy(java.sql.Date datum_m, String icp_m, Connection conn) throws SQLException {
-    //Connection conn = null;
+  public static void ccap_denni_zaznamy(java.sql.Date datum_m, String icp_m, Connection conn)
+      throws SQLException {
     PreparedStatement stmt = null;
 
     String ccap_denni_zaznamy = "call ccap.ccap_denni_zaznamy(?, ?)";
 
     try {
-      //conn = getConnection();
       stmt = conn.prepareStatement(ccap_denni_zaznamy);
       stmt.setQueryTimeout(5);
       stmt.setDate(1, datum_m);
