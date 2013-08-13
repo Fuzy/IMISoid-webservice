@@ -32,6 +32,13 @@ import model.Event;
 public class EventsProvider {
   private static Logger log = Logger.getLogger("imisoid");
 
+  /**
+   * Delete event.
+   * 
+   * @param rowid
+   *          identificator of event.
+   * @return HTTP response.
+   */
   @DELETE
   @Path("{rowid}")
   public Response deleteEvent(@PathParam("rowid") String rowid) throws Exception {
@@ -42,6 +49,17 @@ public class EventsProvider {
     return Response.ok().build();
   }
 
+  /**
+   * Returns events of user for selected period.
+   * 
+   * @param username
+   *          identification of user.
+   * @param from
+   *          start of period (inclusive).
+   * @param to
+   *          end of period (inclusive).
+   * @return HTTP response.
+   */
   @GET
   @Path("{username}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -57,6 +75,14 @@ public class EventsProvider {
     return Response.ok(events).build();
   }
 
+  /**
+   * Create event.
+   * 
+   * @param event
+   *          event to create.
+   * @return HTTP response.
+   * @throws Exception
+   */
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   public Response createEvent(Event event) throws Exception {
@@ -70,6 +96,14 @@ public class EventsProvider {
     return Response.created(createdUri).build();
   }
 
+  /**
+   * Update event.
+   * 
+   * @param event
+   *          event to update
+   * @return HTTP response.
+   * @throws Exception
+   */
   @PUT
   @Path("{rowid}")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -80,6 +114,18 @@ public class EventsProvider {
     return Response.status(Response.Status.ACCEPTED).build();
   }
 
+  /**
+   * Return total time of all events for period.
+   * 
+   * @param icp
+   *          identification of user.
+   * @param from
+   *          start of period (inclusive).
+   * @param to
+   *          end of period (inclusive).
+   * @return HTTP response.
+   * @throws Exception
+   */
   @GET
   @Path("time/{icp}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")

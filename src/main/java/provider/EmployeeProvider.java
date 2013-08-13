@@ -22,6 +22,13 @@ import model.Employee;
 public class EmployeeProvider {
   private static Logger log = Logger.getLogger("imisoid");
 
+  /**
+   * Return employee.
+   * 
+   * @param icp
+   *          identification of user.
+   * @return HTTP response.
+   */
   @GET
   @Path("{icp}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -33,6 +40,14 @@ public class EmployeeProvider {
     return Response.ok(employee).build();
   }
 
+  /**
+   * Return all employees. Contains information if the employee is subordinate
+   * of user.
+   * 
+   * @param icp
+   *          identification of user.
+   * @return HTTP response.
+   */
   @GET
   @Path("all/{icp}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -44,6 +59,11 @@ public class EmployeeProvider {
     return Response.ok(employees).build();
   }
 
+  /**
+   * Get last event of all users.
+   * 
+   * @return HTTP response.
+   */
   @GET
   @Path("lastevents")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -55,6 +75,13 @@ public class EmployeeProvider {
     return Response.ok(employees).build();
   }
 
+  /**
+   * Return last event for employee.
+   * 
+   * @param icp
+   *          identification of user.
+   * @return HTTP response.
+   */
   @GET
   @Path("lastevents/{icp}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")

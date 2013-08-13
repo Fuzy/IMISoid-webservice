@@ -25,6 +25,17 @@ import model.Record;
 public class RecordsProvider {
   private static Logger log = Logger.getLogger("imisoid");
 
+  /**
+   * Returns work records of user for selected period.
+   * 
+   * @param kodpra
+   *          identification of user.
+   * @param from
+   *          start of period (inclusive).
+   * @param to
+   *          end of period (inclusive).
+   * @return HTTP response.
+   */
   @GET
   @Path("{kodpra}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -38,6 +49,18 @@ public class RecordsProvider {
     return Response.ok(records).build();
   }
 
+  /**
+   * Return total time of all records for period.
+   * 
+   * @param icp
+   *          identification of user.
+   * @param from
+   *          start of period (inclusive).
+   * @param to
+   *          end of period (inclusive).
+   * @return HTTP response.
+   * @throws Exception
+   */
   @GET
   @Path("time/{icp}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")

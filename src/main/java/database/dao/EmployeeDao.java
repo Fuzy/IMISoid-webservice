@@ -19,8 +19,8 @@ import model.Employee;
  */
 public class EmployeeDao {
   private static Logger log = Logger.getLogger("imisoid");
-  private static final String DAYS_LIMIT = "100";// TODO mensi interval do
-                                                 // ostreho provozu
+  private static final String DAYS_LIMIT = "7";
+  
   private static final String SQL_GET_EMPLOYEES = ""
       + "select '1' as \"SUB\",z.icp,z.jmeno,o.kodpra from zamestnanec z, osoba o "
       + "where z.icp = o.oscislo and (z.pomer_do >= SYSDATE or z.pomer_do is null) and z.icp_ved like ? " 

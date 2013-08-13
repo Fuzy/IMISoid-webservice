@@ -30,9 +30,9 @@ import model.Employee;
 import model.Event;
 import model.Record;
 
-
 /**
- * Testing provider. Works without backend database, only with data in memory. * 
+ * Testing provider. Works without backend database, only with data in memory. *
+ * 
  * @author Martin Kadlec
  */
 @Path("/test")
@@ -84,8 +84,11 @@ public class TestProvider {
   }
 
   /**
+   * Delete event.
+   * 
    * @param rowid
-   * @return
+   *          identificator of event.
+   * @return HTTP response.
    */
   @DELETE
   @Path("events/{rowid}")
@@ -98,6 +101,14 @@ public class TestProvider {
     return Response.ok().build();
   }
 
+  /**
+   * Create event.
+   * 
+   * @param event
+   *          event to create.
+   * @return HTTP response.
+   * @throws Exception
+   */
   @POST
   @Path("events")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -112,6 +123,14 @@ public class TestProvider {
     return Response.created(createdUri).build();
   }
 
+  /**
+   * Update event.
+   * 
+   * @param event
+   *          event to update
+   * @return HTTP response.
+   * @throws Exception
+   */
   @PUT
   @Path("events/{rowid}")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -124,6 +143,17 @@ public class TestProvider {
     return Response.status(Response.Status.ACCEPTED).build();
   }
 
+  /**
+   * Returns events of user for selected period.
+   * 
+   * @param icp
+   *          identification of user.
+   * @param from
+   *          start of period (inclusive).
+   * @param to
+   *          end of period (inclusive).
+   * @return HTTP response.
+   */
   @GET
   @Path("events/{icp}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -155,6 +185,11 @@ public class TestProvider {
     return Response.ok(events).build();
   }
 
+  /**
+   * Get last event of all users.
+   * 
+   * @return HTTP response.
+   */
   @GET
   @Path("employees/lastevents")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -163,6 +198,14 @@ public class TestProvider {
     return Response.ok(employeesList).build();
   }
 
+  /**
+   * Return all employees. Contains information if the employee is subordinate
+   * of user.
+   * 
+   * @param icp
+   *          identification of user.
+   * @return HTTP response.
+   */
   @GET
   @Path("employees/all/{icp}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -171,6 +214,13 @@ public class TestProvider {
     return Response.ok(employeesList).build();
   }
 
+  /**
+   * Return last event for employee.
+   * 
+   * @param icp
+   *          identification of user.
+   * @return HTTP response.
+   */
   @GET
   @Path("employees/lastevents/{icp}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -187,6 +237,17 @@ public class TestProvider {
     return Response.ok(emp).build();
   }
 
+  /**
+   * Returns work records of user for selected period.
+   * 
+   * @param kodpra
+   *          identification of user.
+   * @param from
+   *          start of period (inclusive).
+   * @param to
+   *          end of period (inclusive).
+   * @return HTTP response.
+   */
   @GET
   @Path("records/{kodpra}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -219,6 +280,18 @@ public class TestProvider {
     return Response.ok(records).build();
   }
 
+  /**
+   * Return total time of all records for period.
+   * 
+   * @param icp
+   *          identification of user.
+   * @param from
+   *          start of period (inclusive).
+   * @param to
+   *          end of period (inclusive).
+   * @return HTTP response.
+   * @throws Exception
+   */
   @GET
   @Path("records/time/{icp}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -228,6 +301,18 @@ public class TestProvider {
     return Response.ok(0L).build();
   }
 
+  /**
+   * Return total time of all events for period.
+   * 
+   * @param icp
+   *          identification of user.
+   * @param from
+   *          start of period (inclusive).
+   * @param to
+   *          end of period (inclusive).
+   * @return HTTP response.
+   * @throws Exception
+   */
   @GET
   @Path("events/time/{icp}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -237,6 +322,13 @@ public class TestProvider {
     return Response.ok(0L).build();
   }
 
+  /**
+   * Return employee.
+   * 
+   * @param icp
+   *          identification of user.
+   * @return HTTP response.
+   */
   @GET
   @Path("employees/{icp}")
   @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
